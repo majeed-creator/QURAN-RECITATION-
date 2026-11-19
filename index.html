@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d1f1c">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<title>Quran Player</title>
+<style>
+:root{--bg:#0d1f1c;--card:#14302b;--ink:#e6f0ec;--mute:#9ab3ac;--line:#2b4f47;--azan:#3fb58c;--proh:#e08a5c;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:22px/1.5 system-ui,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:28px 36px 60px}
+h1{font:700 3rem/1.3 serif;margin:0;text-align:center}
+section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:20px}
+.status{font-size:2rem;font-weight:700;margin:0}
+.dot{display:inline-block;width:18px;height:18px;border-radius:50%;background:var(--mute);margin-right:12px}
+.dot.play{background:var(--azan)}.dot.hold{background:var(--proh)}
+.note{color:var(--mute);margin:6px 0 0}
+button,select,input{font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:14px 22px}
+button.main{background:var(--azan);color:#04201a;font-weight:700;border-color:var(--azan);min-width:220px}
+button:focus,select:focus,input:focus,summary:focus{outline:5px solid #fff;outline-offset:3px}
+.row{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px}
+.bar{position:relative;height:40px;background:var(--bg);border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.seg{position:absolute;top:0;bottom:0;min-width:3px}.seg.a{background:var(--azan)}.seg.p{background:var(--proh)}
+.now{position:absolute;top:0;bottom:0;width:4px;background:#fff}
+table{width:100%;border-collapse:collapse;margin-top:14px}
+td,th{text-align:left;padding:10px 6px;border-bottom:1px solid var(--line)}th{color:var(--mute)}
+label{display:block;color:var(--mute);font-size:.85em;margin:10px 0 4px}
+select{width:100%}
+summary{cursor:pointer;font-weight:700;padding:6px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+</style>
+</head>
+<body>
+<main>
+<h1>القرآن الكريم</h1>
+<section>
+  <p class="status"><span class="dot" id="dot"></span><span id="st">Press OK on Start</span></p>
+  <p class="note" id="sn">Loading reciters…</p>
+  <div class="row"><button class="main" id="go" autofocus>Start</button><button id="nx">Next surah</button></div>
+</section>
+<section>
+  <div class="bar" id="bar"><div class="now" id="nowm"></div></div>
+  <p class="note">Green: azan pause. Orange: prohibited time.</p>
+  <table><thead><tr><th>Prayer</th><th>Time</th><th>Quran pauses</th></tr></thead><tbody id="tt"></tbody></table>
+</section>
+<section>
+  <details>
+    <summary>Settings: reciter, city and pause times</summary>
+    <div class="g">
+      <div><label for="rc">Reciter</label><select id="rc"></select></div>
+      <div><label for="mo">Recitation</label><select id="mo"></select></div>
+      <div><label for="city">City</label><select id="city"></select></div>
+      <div><label for="meth">Method</label><select id="meth"><option value="k">Karachi (Hanafi Asr)</option><option value="m">Muslim World League</option></select></div>
+      <div><label for="az">Pause after azan (min)</label><input id="az" type="number" min="1" max="60"></div>
+      <div><label for="sr">After sunrise (min)</label><input id="sr" type="number" min="0" max="60"></div>
+      <div><label for="zw">Before Dhuhr (min)</label><input id="zw" type="number" min="0" max="60"></div>
+      <div><label for="ss">Before Maghrib (min)</label><input id="ss" type="number" min="0" max="60"></div>
+      <div><label for="pr">Pause at sunrise, noon, sunset</label><select id="pr"><option value="1">Yes</option><option value="0">No</option></select></div>
+    </div>
+    <p class="note">Adjust minutes per prayer to match your mosque:</p>
+    <div class="g" id="adj"></div>
+  </details>
+  <p class="note">Set the TV time zone correctly and turn off the screensaver so audio never stops.</p>
+</section>
+<audio id="au"></audio>
+</main>
+<script>
+(function(){
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
+var P=['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+var CITIES={'Kasur':[31.115,74.447],'Lahore':[31.549,74.344],'Karachi':[24.861,67.01],'Islamabad':[33.684,73.048],'Rawalpindi':[33.598,73.045],'Faisalabad':[31.418,73.079],'Multan':[30.157,71.525],'Peshawar':[34.015,71.525],'Quetta':[30.18,66.997],'Hyderabad':[25.396,68.377]};
+var ALL=[];for(var i=1;i<=114;i++)ALL.push(i);
+var FB=[{id:1,name:'Ibrahim Al-Akdar',moshaf:[{id:1,name:'Hafs - Murattal',server:'https://server6.mp3quran.net/akdr/',list:ALL}]},{id:2,name:'Maher Al-Muaiqly',moshaf:[{id:2,name:'Hafs - Murattal',server:'https://server12.mp3quran.net/maher/',list:ALL}]}];
+var S={city:'Kasur',m:'k',az:10,sr:20,zw:10,ss:20,pr:1,rid:1,mid:1,idx:0,adj:{Fajr:0,Dhuhr:0,Asr:0,Maghrib:0,Isha:0}};
+try{var sv=JSON.parse(localStorage.getItem('qtv')||'null');if(sv)Object.assign(S,sv)}catch(e){}
+var $=function(i){return document.getElementById(i)},au=$('au'),running=false,recs=FB,names={},track=[],srv='';
+var R=Math.PI/180;
+function sin(x){return Math.sin(x*R)}function cos(x){return Math.cos(x*R)}function tan(x){return Math.tan(x*R)}
+function acos(x){return Math.acos(Math.max(-1,Math.min(1,x)))/R}function fix(h){return((h%24)+24)%24}
+function loc(){return CITIES[S.city]||CITIES.Kasur}
+function calc(d){
+  var lat=loc()[0],lon=loc()[1],tz=-d.getTimezoneOffset()/60;
+  var jd=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5+2440587.5-lon/360;
+  var D=jd-2451545,g=(357.529+0.98560028*D)%360,q=(280.459+0.98564736*D)%360;
+  var L=q+1.915*sin(g)+0.02*sin(2*g),e=23.439-3.6e-7*D;
+  var RA=Math.atan2(cos(e)*sin(L),cos(L))/R/15,dec=Math.asin(sin(e)*sin(L))/R;
+  var eq=q/15-fix(RA);if(eq>12)eq-=24;if(eq<-12)eq+=24;
+  var noon=12+tz-lon/15-eq;
+  function T(a){return acos((-sin(a)-sin(dec)*sin(lat))/(cos(dec)*cos(lat)))/15}
+  var ia=S.m==='k'?18:17,f=S.m==='k'?2:1,A=-Math.atan(1/(f+tan(Math.abs(lat-dec))))/R;
+  return{Fajr:noon-T(18),Sunrise:noon-T(0.833),Dhuhr:noon,Asr:noon+acos((sin(A)-sin(dec)*sin(lat))/(cos(dec)*cos(lat)))/15,Maghrib:noon+T(0.833),Isha:noon+T(ia)};
+}
+function at(d,h){var x=new Date(d);x.setHours(0,0,0,0);return new Date(x.getTime()+h*36e5)}
+function wins(d){
+  var t=calc(d),w=[],m=6e4,k=function(n){return at(d,t[n]+(S.adj[n]||0)/60)};
+  P.forEach(function(n){var s=k(n);w.push({s:s,e:new Date(s.getTime()+S.az*m),l:n+' azan',t:'a'})});
+  if(+S.pr){
+    var sr=at(d,t.Sunrise);w.push({s:sr,e:new Date(sr.getTime()+S.sr*m),l:'sunrise time',t:'p'});
+    var dh=k('Dhuhr');w.push({s:new Date(dh.getTime()-S.zw*m),e:dh,l:'noon time',t:'p'});
+    var mg=k('Maghrib');w.push({s:new Date(mg.getTime()-S.ss*m),e:mg,l:'sunset time',t:'p'});
+  }
+  return w;
+}
+function all(){var n=new Date(),y=new Date(n),z=new Date(n);y.setDate(n.getDate()-1);z.setDate(n.getDate()+1);return wins(y).concat(wins(n),wins(z)).sort(function(a,b){return a.s-b.s})}
+function fmt(d){return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}
+function active(){
+  var n=new Date(),w=all(),a=null;
+  for(var i=0;i<w.length;i++)if(w[i].s<=n&&n<w[i].e){a=w[i];break}
+  if(!a)return null;
+  var end=a.e,ch=true;while(ch){ch=false;w.forEach(function(x){if(x.s<=end&&x.e>end){end=x.e;ch=true}})}
+  return{w:a,end:end};
+}
+function render(){
+  var n=new Date(),t=calc(n),rows='';
+  ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].forEach(function(p){
+    var d=at(n,t[p]+(S.adj[p]||0)/60),note=p==='Sunrise'?(+S.pr?fmt(d)+' to '+fmt(new Date(d.getTime()+S.sr*6e4)):'Not paused'):fmt(d)+' to '+fmt(new Date(d.getTime()+S.az*6e4));
+    rows+='<tr><td>'+p+'</td><td>'+fmt(d)+'</td><td>'+note+'</td></tr>';
+  });
+  $('tt').innerHTML=rows;
+  var bar=$('bar');[].slice.call(bar.querySelectorAll('.seg')).forEach(function(e){e.remove()});
+  var day=at(n,0).getTime();
+  wins(n).forEach(function(w){var s=document.createElement('div');s.className='seg '+w.t;s.style.left=(w.s-day)/864e5*100+'%';s.style.width=(w.e-w.s)/864e5*100+'%';bar.appendChild(s)});
+}
+function tname(){var n=track[S.idx];return n?(names[n]||'Surah '+n)+' ('+n+')':''}
+function load(i){
+  if(!track.length)return;S.idx=((i%track.length)+track.length)%track.length;save();
+  au.src=srv+('00'+track[S.idx]).slice(-3)+'.mp3';
+  if(running&&!active())au.play().catch(function(){});
+}
+au.onended=function(){load(S.idx+1)};
+au.onerror=function(){$('sn').textContent='Could not load '+tname()+'. Check internet. Trying next…';setTimeout(function(){load(S.idx+1)},4000)};
+$('nx').onclick=function(){load(S.idx+1)};
+$('go').onclick=function(){
+  running=!running;
+  if(running){if(!au.src)load(S.idx);$('go').textContent='Stop';if(!active())au.play().catch(function(){})}
+  else{$('go').textContent='Start';au.pause()}
+  tick();
+};
+function tick(){
+  var n=new Date(),a=active();$('nowm').style.left=(n-at(n,0))/864e5*100+'%';
+  if(running){if(a){if(!au.paused)au.pause()}else if(au.paused&&au.src)au.play().catch(function(){})}
+  var dot=$('dot'),st=$('st'),sn=$('sn');
+  if(!running){dot.className='dot';st.textContent='Stopped';sn.textContent='Press OK on Start. '+tname()}
+  else if(a){dot.className='dot hold';st.textContent='Paused for '+a.w.l;sn.textContent='Resumes at '+fmt(a.end)+'.'}
+  else{dot.className='dot play';st.textContent='Playing';var nx=all().filter(function(w){return w.s>n})[0];sn.textContent=tname()+(nx?'. Next pause: '+nx.l+' at '+fmt(nx.s):'');}
+}
+function save(){try{localStorage.setItem('qtv',JSON.stringify(S))}catch(e){}}
+function fillMo(){
+  var r=recs.filter(function(x){return x.id==S.rid})[0]||recs[0];
+  $('mo').innerHTML=r.moshaf.map(function(m){return'<option value="'+m.id+'">'+m.name+' ('+m.list.length+')</option>'}).join('');
+  var m=r.moshaf.filter(function(x){return x.id==S.mid})[0]||r.moshaf[0];S.mid=m.id;$('mo').value=m.id;
+  srv=m.server;track=m.list;if(S.idx>=track.length)S.idx=0;
+  if(au.src||running){load(S.idx)}
+}
+function fillRc(){
+  $('rc').innerHTML=recs.map(function(r){return'<option value="'+r.id+'">'+r.name+'</option>'}).join('');
+  if(!recs.some(function(r){return r.id==S.rid}))S.rid=recs[0].id;
+  $('rc').value=S.rid;fillMo();
+}
+$('rc').onchange=function(){S.rid=+$('rc').value;S.mid=0;S.idx=0;fillMo();save();tick()};
+$('mo').onchange=function(){S.mid=+$('mo').value;S.idx=0;fillMo();save();tick()};
+$('city').innerHTML=Object.keys(CITIES).map(function(c){return'<option>'+c+'</option>'}).join('');
+function bind(id,k,num){var el=$(id);el.value=S[k];el.onchange=function(){S[k]=num?(parseFloat(el.value)||0):el.value;save();render();tick()}}
+bind('city','city');bind('meth','m');bind('az','az',1);bind('sr','sr',1);bind('zw','zw',1);bind('ss','ss',1);bind('pr','pr',1);
+$('adj').innerHTML=P.map(function(p){return'<div><label for="a'+p+'">'+p+' (min)</label><input id="a'+p+'" type="number" min="-30" max="30"></div>'}).join('');
+P.forEach(function(p){var el=$('a'+p);el.value=S.adj[p]||0;el.onchange=function(){S.adj[p]=parseFloat(el.value)||0;save();render();tick()}});
+fillRc();render();tick();setInterval(tick,1000);setInterval(render,6e4);
+fetch('https://www.mp3quran.net/api/v3/suwar?language=eng').then(function(r){return r.json()}).then(function(j){j.suwar.forEach(function(s){names[s.id]=s.name.trim()});tick()}).catch(function(){});
+fetch('https://www.mp3quran.net/api/v3/reciters?language=eng').then(function(r){return r.json()}).then(function(j){
+  var out=[];j.reciters.forEach(function(r){
+    var ms=r.moshaf.filter(function(m){return m.surah_total>=114}).map(function(m){return{id:m.id,name:m.name,server:m.server,list:m.surah_list.split(',').map(Number)}});
+    if(ms.length)out.push({id:r.id,name:r.name,moshaf:ms});
+  });
+  if(out.length){recs=out;fillRc();tick()}
+}).catch(function(){$('sn').textContent='Using built-in reciters (could not reach the reciter list).'});
+})();
+</script>
+</body>
+</html>
