@@ -1,0 +1,17 @@
+BRIEF FOR AN ANDROID DEVELOPER: real Android TV app from the Quran web app
+
+Goal: an installable app with its own icon on the Android TV home screen.
+Source: the hosted web app (index.html, manifest.json, sw.js, icons) at the owner's GitHub Pages URL.
+
+Requirements
+1. Wrap the web app in a Trusted Web Activity (Bubblewrap) or a WebView app.
+2. In AndroidManifest.xml add:
+   - <uses-feature android:name="android.software.leanback" android:required="false"/>
+   - <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+   - On the main activity, an intent-filter with category android.intent.category.LEANBACK_LAUNCHER
+   - android:banner="@drawable/tv_banner" on <application> (use tv-banner-320x180.png)
+3. Keep the screen on and allow background audio (foreground media service if using WebView).
+4. Allow autoplay without gesture in the WebView (setMediaPlaybackRequiresUserGesture(false)).
+5. Start on boot (optional): RECEIVE_BOOT_COMPLETED receiver that launches the activity.
+6. Test on an Android TV emulator and a real device with a D-pad remote.
+Deliverables: signed APK or AAB, plus the keystore details for future updates.
