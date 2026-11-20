@@ -34,7 +34,14 @@ summary{cursor:pointer;font-weight:700;padding:6px}
 .ar{font:400 1.9rem/2.2 Amiri,serif;direction:rtl;text-align:right}
 .ur{font:400 1.35rem/2.6 "Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;direction:rtl;text-align:right;color:#bfe3d6}
 .ay{padding:10px 0;border-bottom:1px solid var(--line)}
-#tx{max-height:460px;overflow-y:auto;padding-right:8px}
+#tx{max-height:520px;overflow-y:auto;padding:4px 8px;position:relative;scroll-behavior:smooth}
+.ar{font-size:calc(1.9rem*var(--fs,1))!important}.ur{font-size:calc(1.35rem*var(--fs,1))!important}
+.ay{padding:12px 14px;border-radius:14px;border:2px solid transparent;cursor:pointer}
+.ay.on{background:#1d5a4a;border-color:var(--azan)}.ay.on .ar{color:#fff}.ay.on .ur{color:#fff}
+.sm{padding:8px 14px;font-size:.8em}
+#pr{display:none;direction:ltr}
+@page{margin:16mm}
+@media print{body{background:#fff}main>*:not(#pr){display:none!important}#pr{display:block!important}#pr *{color:#000!important;background:none!important}#pr .ay{border:0;border-bottom:1px solid #ccc;break-inside:avoid}#pr h2{text-align:center;font:700 2rem Amiri,serif}}
 .hide{display:none}
 .sn1{font:700 2.6rem/1.5 Amiri,serif;margin:8px 0 0;text-align:center}.sn2{text-align:center;color:var(--mute);margin:0}
 .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
@@ -48,6 +55,15 @@ summary{cursor:pointer;font-weight:700;padding:6px}
   <p class="sn1" id="nma"></p><p class="sn2" id="nme"></p>
   <p class="note" id="sn">Loading reciters…</p>
   <div class="row"><button class="main" id="go" autofocus>Start</button><button id="pv">Previous</button><button id="nx">Next surah</button></div>
+</section>
+<section>
+  <div class="g">
+    <div><label for="tr">Arabic verses and Urdu translation</label><select id="tr"><option value="1">Show</option><option value="0">Hide</option></select></div>
+    <div><label for="fs">Text size</label><select id="fs"><option value="1">Normal</option><option value="1.25">Large</option><option value="1.5">Extra large</option></select></div>
+    <div><label for="as">Follow the verse being recited</label><select id="as"><option value="1">On</option><option value="0">Off</option></select></div>
+  </div>
+  <div class="row"><button class="sm" id="hb">Highlight earlier</button><button class="sm" id="hf">Highlight later</button><span class="note" id="ho"></span></div>
+  <div id="tx" class="hide" tabindex="0"></div>
 </section>
 <section>
   <div class="g">
@@ -65,11 +81,10 @@ summary{cursor:pointer;font-weight:700;padding:6px}
   </div>
 </section>
 <section>
-  <div class="g">
-    <div><label for="tr">Arabic text and Urdu translation</label><select id="tr"><option value="1">Show</option><option value="0">Hide</option></select></div>
-    <div><label for="as">Auto-scroll with recitation</label><select id="as"><option value="1">On</option><option value="0">Off</option></select></div>
-  </div>
-  <div id="tx" class="hide" tabindex="0"></div>
+  <h2 style="margin:0 0 4px">Download this surah</h2>
+  <p class="note" style="margin:0" id="dn"></p>
+  <div class="row"><button id="dpdf">PDF (Arabic + Urdu)</button><button id="daud">Audio (MP3)</button><button id="dvid">Video (record)</button></div>
+  <p class="note" id="dm">PDF: choose "Save as PDF" in the print window. Video is recorded while the surah plays, so keep this tab open and visible.</p>
 </section>
 <section>
   <div class="bar" id="bar"><div class="now" id="nowm"></div></div>
@@ -93,6 +108,7 @@ summary{cursor:pointer;font-weight:700;padding:6px}
   </details>
   <p class="note">Set the TV time zone correctly and turn off the screensaver so audio never stops.</p>
 </section>
+<div id="pr"></div>
 <audio id="au"></audio>
 </main>
 <script>
@@ -102,9 +118,9 @@ var P=['Fajr','Dhuhr','Asr','Maghrib','Isha'];
 var CITIES={'Kasur':[31.115,74.447],'Lahore':[31.549,74.344],'Karachi':[24.861,67.01],'Islamabad':[33.684,73.048],'Rawalpindi':[33.598,73.045],'Faisalabad':[31.418,73.079],'Multan':[30.157,71.525],'Peshawar':[34.015,71.525],'Quetta':[30.18,66.997],'Hyderabad':[25.396,68.377]};
 var ALL=[];for(var i=1;i<=114;i++)ALL.push(i);
 var FB=[{id:1,name:'Ibrahim Al-Akdar',moshaf:[{id:1,name:'Hafs - Murattal',server:'https://server6.mp3quran.net/akdr/',list:ALL}]},{id:2,name:'Maher Al-Muaiqly',moshaf:[{id:2,name:'Hafs - Murattal',server:'https://server12.mp3quran.net/maher/',list:ALL}]}];
-var S={city:'Kasur',m:'k',az:10,sr:20,zw:10,ss:20,pr:1,rid:1,mid:1,idx:0,md:'next',tr:1,as:1,sc:'all',sh:6,sm:0,sa:'AM',hr:8,q:'',adj:{Fajr:0,Dhuhr:0,Asr:0,Maghrib:0,Isha:0}};
+var S={city:'Kasur',m:'k',az:10,sr:20,zw:10,ss:20,pr:1,rid:1,mid:1,idx:0,md:'next',fs:1,off:0,tr:1,as:1,sc:'all',sh:6,sm:0,sa:'AM',hr:8,q:'',adj:{Fajr:0,Dhuhr:0,Asr:0,Maghrib:0,Isha:0}};
 try{var sv=JSON.parse(localStorage.getItem('qtv')||'null');if(sv)Object.assign(S,sv)}catch(e){}
-var $=function(i){return document.getElementById(i)},au=$('au'),running=false,recs=FB,names={},track=[],srv='',cache={},namesAr={};
+var $=function(i){return document.getElementById(i)},au=$('au'),running=false,recs=FB,names={},track=[],srv='',cache={},namesAr={},ays=[],cum=[],curI=-1,rec=null;
 var R=Math.PI/180;
 function sin(x){return Math.sin(x*R)}function cos(x){return Math.cos(x*R)}function tan(x){return Math.tan(x*R)}
 function acos(x){return Math.acos(Math.max(-1,Math.min(1,x)))/R}function fix(h){return((h%24)+24)%24}
@@ -166,22 +182,24 @@ function render(){
 function tname(){var n=track[S.idx];return n?(names[n]||'Surah '+n)+' ('+n+')':''}
 function load(i){
   if(!track.length)return;S.idx=((i%track.length)+track.length)%track.length;S.cur=track[S.idx];save();
-  au.src=srv+('00'+track[S.idx]).slice(-3)+'.mp3';$('su').value=track[S.idx];shownm();loadText(track[S.idx]);
-  if(running&&!blocked())au.play().catch(function(){});
+  au.src=srv+('00'+track[S.idx]).slice(-3)+'.mp3';$('su').value=track[S.idx];shownm();dnTxt();loadText(track[S.idx]);try{if('mediaSession' in navigator)navigator.mediaSession.metadata=new MediaMetadata({title:sname(track[S.idx]),artist:(recs.filter(function(r){return r.id==S.rid})[0]||{}).name||'Quran'})}catch(e){}
+  if(running&&!blocked()&&!rec)au.play().catch(function(){});
 }
 au.onended=function(){load(S.md==='repeat'?S.idx:S.idx+1)};
-au.ontimeupdate=function(){var t=$('tx');if(+S.as&&+S.tr&&au.duration>0&&t.scrollHeight>t.clientHeight)t.scrollTop=au.currentTime/au.duration*(t.scrollHeight-t.clientHeight)};
+au.ontimeupdate=function(){hl(false)};
 au.onerror=function(){$('sn').textContent='Could not load '+tname()+'. Check internet. Trying next…';setTimeout(function(){load(S.idx+1)},4000)};
 $('nx').onclick=function(){load(S.idx+1)};$('pv').onclick=function(){load(S.idx-1)};
+var wk=null;function lock(){try{if(navigator.wakeLock&&running)navigator.wakeLock.request('screen').then(function(l){wk=l}).catch(function(){})}catch(e){}}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')lock()});
 $('go').onclick=function(){
   running=!running;
-  if(running){if(!au.src)load(S.idx);$('go').textContent='Stop';if(!blocked())au.play().catch(function(){})}
+  if(running){if(!au.src)load(S.idx);$('go').textContent='Stop';lock();if(!blocked())au.play().catch(function(){})}
   else{$('go').textContent='Start';au.pause()}
   tick();
 };
 function tick(){
   var n=new Date(),a=blocked();$('nowm').style.left=(n-at(n,0))/864e5*100+'%';
-  if(running){if(a){if(!au.paused)au.pause()}else if(au.paused&&au.src)au.play().catch(function(){})}
+  if(running){if(a){if(!au.paused)au.pause()}else if(au.paused&&au.src&&!rec)au.play().catch(function(){})}
   var dot=$('dot'),st=$('st'),sn=$('sn');
   if(!running){dot.className='dot';st.textContent='Stopped';sn.textContent='Press OK on Start. '+tname()}
   else if(a){dot.className='dot hold';st.textContent=a.l;sn.textContent='Resumes at '+fmt(a.end)+'.'}
@@ -189,7 +207,6 @@ function tick(){
 }
 function save(){try{localStorage.setItem('qtv',JSON.stringify(S))}catch(e){}}
 var POP=['afasy','sudais','shuraim','abdulbasit','abdul basit','husary','hussary','minshawi','maher','muaiqly','ghamdi','shatri','dossari','rifai','ajmi','budair','tablawi'];
-function shownm(){var n=track[S.idx];if(!n)return;$('nma').textContent=(namesAr[n]||'');$('nme').textContent='Surah '+n+' · '+sname(n)}
 function sname(n){return (names[n]||'Surah '+n)}
 function fillSu(){
   $('su').innerHTML=track.map(function(n){return'<option value="'+n+'">'+n+'. '+sname(n)+'</option>'}).join('');
@@ -212,14 +229,43 @@ function fillRc(){
   $('rc').value=S.rid;fillMo();
 }
 function rank(r){var n=r.name.toLowerCase();for(var i=0;i<POP.length;i++)if(n.indexOf(POP[i])>=0)return i;return 99}
-function loadText(n){
-  var box=$('tx');if(!+S.tr){box.className='hide';return}
-  box.className='';box.scrollTop=0;
-  function show(d){if(track[S.idx]!==n)return;box.innerHTML='';d[0].ayahs.forEach(function(a,i){var w=document.createElement('div');w.className='ay';var x=document.createElement('div');x.className='ar';x.textContent=a.text+' \u06DD'+(i+1);var u=document.createElement('div');u.className='ur';u.textContent=d[1].ayahs[i]?d[1].ayahs[i].text:'';w.appendChild(x);w.appendChild(u);box.appendChild(w)})}
-  if(cache[n])return show(cache[n]);
-  box.textContent='Loading text…';
-  fetch('https://api.alquran.cloud/v1/surah/'+n+'/editions/quran-simple,ur.jalandhry').then(function(r){return r.json()}).then(function(j){cache[n]=j.data;show(j.data)}).catch(function(){box.textContent='Could not load the text. Check internet.'});
+function lets(t){return t.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\s]/g,'').length}
+function hl(force){
+  if(!ays.length||!au.duration)return;
+  var f=Math.min(.999,Math.max(0,au.currentTime/au.duration+S.off/100)),i=0,tot=cum[cum.length-1];
+  while(i<cum.length-1&&f*tot>=cum[i])i++;
+  if(i===curI&&!force)return;
+  if(ays[curI])ays[curI].classList.remove('on');
+  curI=i;var el=ays[i];el.classList.add('on');shownm();
+  if(+S.as){var b=$('tx');b.scrollTo({top:Math.max(0,el.offsetTop-b.clientHeight*0.3),behavior:'smooth'})}
 }
+function shownm(){var n=track[S.idx];if(!n)return;$('nma').textContent=namesAr[n]||'';$('nme').textContent='Surah '+n+' · '+sname(n)+(curI>=0&&ays.length?' · Ayah '+(curI+1)+' of '+ays.length:'')}
+function loadText(n){
+  var box=$('tx');ays=[];cum=[];curI=-1;
+  if(!+S.tr){box.className='hide';return}
+  box.className='';box.scrollTop=0;
+  function show(d){
+    if(track[S.idx]!==n)return;box.innerHTML='';var acc=0;
+    d[0].ayahs.forEach(function(a,i){
+      var w=document.createElement('div');w.className='ay';
+      var x=document.createElement('div');x.className='ar';x.textContent=a.text+' \u06DD'+(i+1);
+      var u=document.createElement('div');u.className='ur';u.textContent=d[1].ayahs[i]?d[1].ayahs[i].text:'';
+      w.appendChild(x);w.appendChild(u);box.appendChild(w);ays.push(w);
+      acc+=lets(a.text)+12;cum.push(acc);
+      w.onclick=function(){if(au.duration){var st=(i?cum[i-1]:0)/cum[cum.length-1]-S.off/100;au.currentTime=Math.max(0,st)*au.duration;hl(true)}};
+    });
+    hl(true);
+  }
+  if(cache[n])return show(cache[n]);
+  box.textContent='Loading verses…';
+  fetch('https://api.alquran.cloud/v1/surah/'+n+'/editions/quran-simple,ur.jalandhry').then(function(r){return r.json()}).then(function(j){cache[n]=j.data;show(j.data)}).catch(function(){box.textContent='Could not load the verses. Check internet.'});
+}
+au.onloadedmetadata=function(){hl(true)};
+function offtxt(){$('ho').textContent='Timing adjust: '+(S.off>0?'+':'')+S.off+'%'}
+$('hb').onclick=function(){S.off=Math.max(-15,+(S.off-1).toFixed(1));save();offtxt();hl(true)};
+$('hf').onclick=function(){S.off=Math.min(15,+(S.off+1).toFixed(1));save();offtxt();hl(true)};
+offtxt();
+function fsz(){$('tx').style.setProperty('--fs',S.fs)}
 $('rc').onchange=function(){S.rid=+$('rc').value;S.mid=0;fillMo();save();tick()};
 $('mo').onchange=function(){S.mid=+$('mo').value;fillMo();save();tick()};
 $('su').onchange=function(){var i=track.indexOf(+$('su').value);if(i>=0){load(i);tick()}};
@@ -231,10 +277,74 @@ P.forEach(function(p){var el=$('a'+p);el.value=S.adj[p]||0;el.onchange=function(
 function nums(id,a,b,f){var h='';for(var i=a;i<=b;i+=(f||1))h+='<option value="'+i+'">'+(id==='sm'&&i<10?'0'+i:i)+'</option>';$(id).innerHTML=h}
 nums('sh',1,12);nums('sm',0,45,15);nums('hr',1,24);
 ['md','sc','sa','as'].forEach(function(k){var id={md:'md',sc:'sc',sa:'sa',as:'as'}[k];bind(id,k)});
-bind('tr','tr',1);bind('sh','sh',1);bind('sm','sm',1);bind('hr','hr',1);
+bind('tr','tr',1);bind('fs','fs',1);$('fs').addEventListener('change',fsz);fsz();bind('sh','sh',1);bind('sm','sm',1);bind('hr','hr',1);
 function cu(){$('cu').className='g'+(S.sc==='custom'?'':' hide')}cu();$('sc').addEventListener('change',cu);
 $('tr').addEventListener('change',function(){loadText(track[S.idx])});
-fillRc();render();tick();setInterval(tick,1000);setInterval(render,6e4);
+
+function getText(n){
+  if(cache[n])return Promise.resolve(cache[n]);
+  return fetch('https://api.alquran.cloud/v1/surah/'+n+'/editions/quran-simple,ur.jalandhry').then(function(r){return r.json()}).then(function(j){cache[n]=j.data;return j.data});
+}
+function dmsg(t){$('dm').textContent=t}
+function fname(ext){var n=track[S.idx];return 'Surah-'+('00'+n).slice(-3)+'-'+sname(n).replace(/[^A-Za-z0-9]+/g,'-')+'.'+ext}
+function saveBlob(b,name){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},4000)}
+function dnTxt(){var n=track[S.idx];$('dn').textContent=n?'Current: Surah '+n+' · '+sname(n):''}
+$('dpdf').onclick=function(){
+  var n=track[S.idx];if(!n)return;dmsg('Preparing PDF…');
+  getText(n).then(function(d){
+    var p=$('pr');p.innerHTML='';var h=document.createElement('h2');h.textContent=(namesAr[n]||'')+'  ·  Surah '+n+' '+sname(n);p.appendChild(h);
+    d[0].ayahs.forEach(function(a,i){var w=document.createElement('div');w.className='ay';var x=document.createElement('div');x.className='ar';x.textContent=a.text+' \u06DD'+(i+1);var u=document.createElement('div');u.className='ur';u.textContent=d[1].ayahs[i]?d[1].ayahs[i].text:'';w.appendChild(x);w.appendChild(u);p.appendChild(w)});
+    dmsg('In the print window, choose "Save as PDF".');setTimeout(function(){window.print()},400);
+  }).catch(function(){dmsg('Could not load the text. Check internet.')});
+};
+$('daud').onclick=function(){
+  var u=au.src;if(!u)return;dmsg('Downloading audio… this can take a while.');
+  fetch(u).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){saveBlob(b,fname('mp3'));dmsg('Audio saved.')})
+  .catch(function(){window.open(u,'_blank');dmsg('Opened the audio in a new tab. Use its menu to save the file.')});
+};
+function wrap(c,t,mw){var w=t.split(' '),L=[],l='';w.forEach(function(x){var q=l?l+' '+x:x;if(c.measureText(q).width>mw&&l){L.push(l);l=x}else l=q});if(l)L.push(l);return L}
+$('dvid').onclick=function(){
+  if(rec){rec.stop();return}
+  var n=track[S.idx];if(!n)return;if(!window.MediaRecorder){dmsg('This browser cannot record video.');return}
+  dmsg('Preparing video…');
+  getText(n).then(function(d){
+    var ra=new Audio();ra.crossOrigin='anonymous';ra.src=au.src;var done=false;
+    var to=setTimeout(function(){if(!done){dmsg('Audio did not load for video.');ra.src=''}},20000);
+    ra.onerror=function(){clearTimeout(to);dmsg('This reciter\u2019s server does not allow video export. Try another reciter.')};
+    ra.oncanplaythrough=function(){
+      if(done)return;done=true;clearTimeout(to);
+      var cv=document.createElement('canvas');cv.width=1280;cv.height=720;var c=cv.getContext('2d');
+      var ac=new (window.AudioContext||window.webkitAudioContext)(),src=ac.createMediaElementSource(ra),ds=ac.createMediaStreamDestination();
+      src.connect(ds);src.connect(ac.destination);
+      var st=cv.captureStream(25);ds.stream.getAudioTracks().forEach(function(t){st.addTrack(t)});
+      var mt=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].filter(function(m){return MediaRecorder.isTypeSupported(m)})[0];
+      var chunks=[],mr=new MediaRecorder(st,mt?{mimeType:mt}:undefined);
+      var tot=0,cm=d[0].ayahs.map(function(a){tot+=lets(a.text)+12;return tot});
+      mr.ondataavailable=function(e){if(e.data.size)chunks.push(e.data)};
+      var tm=null;
+      function draw(){
+        var f=ra.duration?Math.min(.999,ra.currentTime/ra.duration+S.off/100):0,i=0;while(i<cm.length-1&&f*tot>=cm[i])i++;
+        var ar=d[0].ayahs[i].text,ur=d[1].ayahs[i]?d[1].ayahs[i].text:'',k,AL,UL,ah=[86,68,56,46],uh=[70,58,48,40],asz=[56,44,36,30],usz=[34,28,24,20];
+        c.fillStyle='#0d1f1c';c.fillRect(0,0,1280,720);c.textAlign='center';
+        for(k=0;k<4;k++){c.direction='rtl';c.font='400 '+asz[k]+'px Amiri,serif';AL=wrap(c,ar,1120);c.font='400 '+usz[k]+'px "Noto Nastaliq Urdu",serif';UL=wrap(c,ur,1120);if(AL.length*ah[k]+UL.length*uh[k]<=500)break}
+        if(k>3)k=3;
+        c.fillStyle='#e6f0ec';c.direction='rtl';c.font='700 46px Amiri,serif';c.fillText(namesAr[n]||'',640,60);
+        c.direction='ltr';c.font='24px sans-serif';c.fillStyle='#9ab3ac';c.fillText('Surah '+n+' · '+sname(n)+' · Ayah '+(i+1)+' of '+cm.length,640,96);
+        var y=170;c.direction='rtl';c.fillStyle='#fff';c.font='400 '+asz[k]+'px Amiri,serif';AL.forEach(function(l){c.fillText(l,640,y);y+=ah[k]});
+        y+=10;c.fillStyle='#bfe3d6';c.font='400 '+usz[k]+'px "Noto Nastaliq Urdu",serif';UL.forEach(function(l){c.fillText(l,640,y);y+=uh[k]});
+        c.fillStyle='#3fb58c';c.fillRect(0,712,1280*f,8);
+        dmsg('Recording video… '+Math.round(f*100)+'%. Press the Video button again to stop and save.');
+      }
+      mr.onstop=function(){clearInterval(tm);ra.pause();ac.close();rec=null;$('dvid').textContent='Video (record)';
+        if(chunks.length){saveBlob(new Blob(chunks,{type:'video/webm'}),fname('webm'));dmsg('Video saved (.webm). Play it with Chrome or VLC.')}};
+      ra.onended=function(){if(rec)mr.stop()};
+      rec=mr;au.pause();$('dvid').textContent='Stop video';
+      document.fonts&&document.fonts.load('40px "Noto Nastaliq Urdu"').catch(function(){});
+      mr.start(1000);tm=setInterval(draw,100);ac.resume();ra.play().catch(function(){dmsg('Could not start. Press the Video button again.');mr.stop()});
+    };
+  }).catch(function(){dmsg('Could not load the text. Check internet.')});
+};
+fillRc();render();dnTxt();tick();setInterval(tick,1000);setInterval(render,6e4);
 fetch('https://www.mp3quran.net/api/v3/suwar?language=eng').then(function(r){return r.json()}).then(function(j){j.suwar.forEach(function(s){names[s.id]=s.name.trim()});fillSu();shownm();tick()}).catch(function(){});
 fetch('https://www.mp3quran.net/api/v3/suwar?language=ar').then(function(r){return r.json()}).then(function(j){j.suwar.forEach(function(x){namesAr[x.id]=x.name.trim()});shownm()}).catch(function(){});
 fetch('https://www.mp3quran.net/api/v3/reciters?language=eng').then(function(r){return r.json()}).then(function(j){
