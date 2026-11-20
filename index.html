@@ -39,9 +39,9 @@ summary{cursor:pointer;font-weight:700;padding:6px}
 .ay{padding:12px 14px;border-radius:14px;border:2px solid transparent;cursor:pointer}
 .ay.on{background:#1d5a4a;border-color:var(--azan)}.ay.on .ar{color:#fff}.ay.on .ur{color:#fff}
 .sm{padding:8px 14px;font-size:.8em}
-#pr{display:none;direction:ltr}
+#prt{display:none;direction:ltr}
 @page{margin:16mm}
-@media print{body{background:#fff}main>*:not(#pr){display:none!important}#pr{display:block!important}#pr *{color:#000!important;background:none!important}#pr .ay{border:0;border-bottom:1px solid #ccc;break-inside:avoid}#pr h2{text-align:center;font:700 2rem Amiri,serif}}
+@media print{body{background:#fff}main>*:not(#prt){display:none!important}#prt{display:block!important}#prt *{color:#000!important;background:none!important}#prt .ay{border:0;border-bottom:1px solid #ccc;break-inside:avoid}#prt h2{text-align:center;font:700 2rem Amiri,serif}}
 .hide{display:none}
 .sn1{font:700 2.6rem/1.5 Amiri,serif;margin:8px 0 0;text-align:center}.sn2{text-align:center;color:var(--mute);margin:0}
 .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
@@ -108,7 +108,7 @@ summary{cursor:pointer;font-weight:700;padding:6px}
   </details>
   <p class="note">Set the TV time zone correctly and turn off the screensaver so audio never stops.</p>
 </section>
-<div id="pr"></div>
+<div id="prt"></div>
 <audio id="au"></audio>
 </main>
 <script>
@@ -292,7 +292,7 @@ function dnTxt(){var n=track[S.idx];$('dn').textContent=n?'Current: Surah '+n+' 
 $('dpdf').onclick=function(){
   var n=track[S.idx];if(!n)return;dmsg('Preparing PDF…');
   getText(n).then(function(d){
-    var p=$('pr');p.innerHTML='';var h=document.createElement('h2');h.textContent=(namesAr[n]||'')+'  ·  Surah '+n+' '+sname(n);p.appendChild(h);
+    var p=$('prt');p.innerHTML='';var h=document.createElement('h2');h.textContent=(namesAr[n]||'')+'  ·  Surah '+n+' '+sname(n);p.appendChild(h);
     d[0].ayahs.forEach(function(a,i){var w=document.createElement('div');w.className='ay';var x=document.createElement('div');x.className='ar';x.textContent=a.text+' \u06DD'+(i+1);var u=document.createElement('div');u.className='ur';u.textContent=d[1].ayahs[i]?d[1].ayahs[i].text:'';w.appendChild(x);w.appendChild(u);p.appendChild(w)});
     dmsg('In the print window, choose "Save as PDF".');setTimeout(function(){window.print()},400);
   }).catch(function(){dmsg('Could not load the text. Check internet.')});
