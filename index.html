@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#0d1f1c">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap">
 <title>Quran Player</title>
 <style>
 :root{--bg:#0d1f1c;--card:#14302b;--ink:#e6f0ec;--mute:#9ab3ac;--line:#2b4f47;--azan:#3fb58c;--proh:#e08a5c;color-scheme:dark}
@@ -30,6 +31,12 @@ td,th{text-align:left;padding:10px 6px;border-bottom:1px solid var(--line)}th{co
 label{display:block;color:var(--mute);font-size:.85em;margin:10px 0 4px}
 select{width:100%}
 summary{cursor:pointer;font-weight:700;padding:6px}
+.ar{font:400 1.9rem/2.2 Amiri,serif;direction:rtl;text-align:right}
+.ur{font:400 1.35rem/2.6 "Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;direction:rtl;text-align:right;color:#bfe3d6}
+.ay{padding:10px 0;border-bottom:1px solid var(--line)}
+#tx{max-height:460px;overflow-y:auto;padding-right:8px}
+.hide{display:none}
+.sn1{font:700 2.6rem/1.5 Amiri,serif;margin:8px 0 0;text-align:center}.sn2{text-align:center;color:var(--mute);margin:0}
 .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
 </style>
 </head>
@@ -38,8 +45,31 @@ summary{cursor:pointer;font-weight:700;padding:6px}
 <h1>القرآن الكريم</h1>
 <section>
   <p class="status"><span class="dot" id="dot"></span><span id="st">Press OK on Start</span></p>
+  <p class="sn1" id="nma"></p><p class="sn2" id="nme"></p>
   <p class="note" id="sn">Loading reciters…</p>
-  <div class="row"><button class="main" id="go" autofocus>Start</button><button id="nx">Next surah</button></div>
+  <div class="row"><button class="main" id="go" autofocus>Start</button><button id="pv">Previous</button><button id="nx">Next surah</button></div>
+</section>
+<section>
+  <div class="g">
+    <div><label for="rc">Reciter (qari)</label><select id="rc"></select></div>
+    <div><label for="mo">Recitation style</label><select id="mo"></select></div>
+    <div><label for="su">Surah</label><select id="su"></select></div>
+    <div><label for="md">After the surah ends</label><select id="md"><option value="next">Continue to next surah</option><option value="repeat">Repeat this surah</option></select></div>
+    <div><label for="sc">Play time</label><select id="sc"><option value="all">All day (24 hours)</option><option value="custom">Only for set hours</option></select></div>
+  </div>
+  <div class="g hide" id="cu">
+    <div><label for="sh">Start hour</label><select id="sh"></select></div>
+    <div><label for="sm">Start minute</label><select id="sm"></select></div>
+    <div><label for="sa">AM / PM</label><select id="sa"><option>AM</option><option>PM</option></select></div>
+    <div><label for="hr">Play for (hours)</label><select id="hr"></select></div>
+  </div>
+</section>
+<section>
+  <div class="g">
+    <div><label for="tr">Arabic text and Urdu translation</label><select id="tr"><option value="1">Show</option><option value="0">Hide</option></select></div>
+    <div><label for="as">Auto-scroll with recitation</label><select id="as"><option value="1">On</option><option value="0">Off</option></select></div>
+  </div>
+  <div id="tx" class="hide" tabindex="0"></div>
 </section>
 <section>
   <div class="bar" id="bar"><div class="now" id="nowm"></div></div>
@@ -48,10 +78,8 @@ summary{cursor:pointer;font-weight:700;padding:6px}
 </section>
 <section>
   <details>
-    <summary>Settings: reciter, city and pause times</summary>
+    <summary>Settings: city and prayer pause times</summary>
     <div class="g">
-      <div><label for="rc">Reciter</label><select id="rc"></select></div>
-      <div><label for="mo">Recitation</label><select id="mo"></select></div>
       <div><label for="city">City</label><select id="city"></select></div>
       <div><label for="meth">Method</label><select id="meth"><option value="k">Karachi (Hanafi Asr)</option><option value="m">Muslim World League</option></select></div>
       <div><label for="az">Pause after azan (min)</label><input id="az" type="number" min="1" max="60"></div>
@@ -74,9 +102,9 @@ var P=['Fajr','Dhuhr','Asr','Maghrib','Isha'];
 var CITIES={'Kasur':[31.115,74.447],'Lahore':[31.549,74.344],'Karachi':[24.861,67.01],'Islamabad':[33.684,73.048],'Rawalpindi':[33.598,73.045],'Faisalabad':[31.418,73.079],'Multan':[30.157,71.525],'Peshawar':[34.015,71.525],'Quetta':[30.18,66.997],'Hyderabad':[25.396,68.377]};
 var ALL=[];for(var i=1;i<=114;i++)ALL.push(i);
 var FB=[{id:1,name:'Ibrahim Al-Akdar',moshaf:[{id:1,name:'Hafs - Murattal',server:'https://server6.mp3quran.net/akdr/',list:ALL}]},{id:2,name:'Maher Al-Muaiqly',moshaf:[{id:2,name:'Hafs - Murattal',server:'https://server12.mp3quran.net/maher/',list:ALL}]}];
-var S={city:'Kasur',m:'k',az:10,sr:20,zw:10,ss:20,pr:1,rid:1,mid:1,idx:0,adj:{Fajr:0,Dhuhr:0,Asr:0,Maghrib:0,Isha:0}};
+var S={city:'Kasur',m:'k',az:10,sr:20,zw:10,ss:20,pr:1,rid:1,mid:1,idx:0,md:'next',tr:1,as:1,sc:'all',sh:6,sm:0,sa:'AM',hr:8,q:'',adj:{Fajr:0,Dhuhr:0,Asr:0,Maghrib:0,Isha:0}};
 try{var sv=JSON.parse(localStorage.getItem('qtv')||'null');if(sv)Object.assign(S,sv)}catch(e){}
-var $=function(i){return document.getElementById(i)},au=$('au'),running=false,recs=FB,names={},track=[],srv='';
+var $=function(i){return document.getElementById(i)},au=$('au'),running=false,recs=FB,names={},track=[],srv='',cache={},namesAr={};
 var R=Math.PI/180;
 function sin(x){return Math.sin(x*R)}function cos(x){return Math.cos(x*R)}function tan(x){return Math.tan(x*R)}
 function acos(x){return Math.acos(Math.max(-1,Math.min(1,x)))/R}function fix(h){return((h%24)+24)%24}
@@ -113,6 +141,17 @@ function active(){
   var end=a.e,ch=true;while(ch){ch=false;w.forEach(function(x){if(x.s<=end&&x.e>end){end=x.e;ch=true}})}
   return{w:a,end:end};
 }
+function sched(){
+  if(S.sc!=='custom'||+S.hr>=24)return null;
+  var n=new Date(),st=new Date(n),len=S.hr*36e5;st.setHours(S.sh%12+(S.sa==='PM'?12:0),+S.sm,0,0);
+  for(var d=-1;d<=0;d++){var b=st.getTime()+d*864e5;if(n.getTime()>=b&&n.getTime()<b+len)return{on:true,end:new Date(b+len)}}
+  return{on:false,start:st>n?st:new Date(st.getTime()+864e5)};
+}
+function blocked(){
+  var a=active();if(a)return{l:'Paused for '+a.w.l,end:a.end};
+  var s=sched();if(s&&!s.on)return{l:'Outside your play hours',end:s.start};
+  return null;
+}
 function render(){
   var n=new Date(),t=calc(n),rows='';
   ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].forEach(function(p){
@@ -126,49 +165,78 @@ function render(){
 }
 function tname(){var n=track[S.idx];return n?(names[n]||'Surah '+n)+' ('+n+')':''}
 function load(i){
-  if(!track.length)return;S.idx=((i%track.length)+track.length)%track.length;save();
-  au.src=srv+('00'+track[S.idx]).slice(-3)+'.mp3';
-  if(running&&!active())au.play().catch(function(){});
+  if(!track.length)return;S.idx=((i%track.length)+track.length)%track.length;S.cur=track[S.idx];save();
+  au.src=srv+('00'+track[S.idx]).slice(-3)+'.mp3';$('su').value=track[S.idx];shownm();loadText(track[S.idx]);
+  if(running&&!blocked())au.play().catch(function(){});
 }
-au.onended=function(){load(S.idx+1)};
+au.onended=function(){load(S.md==='repeat'?S.idx:S.idx+1)};
+au.ontimeupdate=function(){var t=$('tx');if(+S.as&&+S.tr&&au.duration>0&&t.scrollHeight>t.clientHeight)t.scrollTop=au.currentTime/au.duration*(t.scrollHeight-t.clientHeight)};
 au.onerror=function(){$('sn').textContent='Could not load '+tname()+'. Check internet. Trying next…';setTimeout(function(){load(S.idx+1)},4000)};
-$('nx').onclick=function(){load(S.idx+1)};
+$('nx').onclick=function(){load(S.idx+1)};$('pv').onclick=function(){load(S.idx-1)};
 $('go').onclick=function(){
   running=!running;
-  if(running){if(!au.src)load(S.idx);$('go').textContent='Stop';if(!active())au.play().catch(function(){})}
+  if(running){if(!au.src)load(S.idx);$('go').textContent='Stop';if(!blocked())au.play().catch(function(){})}
   else{$('go').textContent='Start';au.pause()}
   tick();
 };
 function tick(){
-  var n=new Date(),a=active();$('nowm').style.left=(n-at(n,0))/864e5*100+'%';
+  var n=new Date(),a=blocked();$('nowm').style.left=(n-at(n,0))/864e5*100+'%';
   if(running){if(a){if(!au.paused)au.pause()}else if(au.paused&&au.src)au.play().catch(function(){})}
   var dot=$('dot'),st=$('st'),sn=$('sn');
   if(!running){dot.className='dot';st.textContent='Stopped';sn.textContent='Press OK on Start. '+tname()}
-  else if(a){dot.className='dot hold';st.textContent='Paused for '+a.w.l;sn.textContent='Resumes at '+fmt(a.end)+'.'}
-  else{dot.className='dot play';st.textContent='Playing';var nx=all().filter(function(w){return w.s>n})[0];sn.textContent=tname()+(nx?'. Next pause: '+nx.l+' at '+fmt(nx.s):'');}
+  else if(a){dot.className='dot hold';st.textContent=a.l;sn.textContent='Resumes at '+fmt(a.end)+'.'}
+  else{dot.className='dot play';st.textContent='Playing';var nx=all().filter(function(w){return w.s>n})[0],sc=sched();sn.textContent=tname()+(nx?'. Next azan/pause: '+nx.l+' at '+fmt(nx.s):'')+(sc?'. Plays until '+fmt(sc.end):'');}
 }
 function save(){try{localStorage.setItem('qtv',JSON.stringify(S))}catch(e){}}
+var POP=['afasy','sudais','shuraim','abdulbasit','abdul basit','husary','hussary','minshawi','maher','muaiqly','ghamdi','shatri','dossari','rifai','ajmi','budair','tablawi'];
+function shownm(){var n=track[S.idx];if(!n)return;$('nma').textContent=(namesAr[n]||'');$('nme').textContent='Surah '+n+' · '+sname(n)}
+function sname(n){return (names[n]||'Surah '+n)}
+function fillSu(){
+  $('su').innerHTML=track.map(function(n){return'<option value="'+n+'">'+n+'. '+sname(n)+'</option>'}).join('');
+  $('su').value=track[S.idx];
+}
 function fillMo(){
   var r=recs.filter(function(x){return x.id==S.rid})[0]||recs[0];
   $('mo').innerHTML=r.moshaf.map(function(m){return'<option value="'+m.id+'">'+m.name+' ('+m.list.length+')</option>'}).join('');
   var m=r.moshaf.filter(function(x){return x.id==S.mid})[0]||r.moshaf[0];S.mid=m.id;$('mo').value=m.id;
-  srv=m.server;track=m.list;if(S.idx>=track.length)S.idx=0;
-  if(au.src||running){load(S.idx)}
+  var cur=track[S.idx]||S.cur;srv=m.server;track=m.list;var k=track.indexOf(cur);S.idx=k>=0?k:0;
+  fillSu();if(au.src||running){load(S.idx)}
 }
+function opt(r){return'<option value="'+r.id+'">'+r.name+'</option>'}
 function fillRc(){
-  $('rc').innerHTML=recs.map(function(r){return'<option value="'+r.id+'">'+r.name+'</option>'}).join('');
-  if(!recs.some(function(r){return r.id==S.rid}))S.rid=recs[0].id;
+  var L=recs.filter(function(r){var n=r.name.toLowerCase();return POP.some(function(p){return n.indexOf(p)>=0})});
+  if(!L.length)L=recs;
+  L.sort(function(x,y){return rank(x)-rank(y)});
+  $('rc').innerHTML=L.map(opt).join('');
+  if(!L.some(function(r){return r.id==S.rid}))S.rid=L[0].id;
   $('rc').value=S.rid;fillMo();
 }
-$('rc').onchange=function(){S.rid=+$('rc').value;S.mid=0;S.idx=0;fillMo();save();tick()};
-$('mo').onchange=function(){S.mid=+$('mo').value;S.idx=0;fillMo();save();tick()};
+function rank(r){var n=r.name.toLowerCase();for(var i=0;i<POP.length;i++)if(n.indexOf(POP[i])>=0)return i;return 99}
+function loadText(n){
+  var box=$('tx');if(!+S.tr){box.className='hide';return}
+  box.className='';box.scrollTop=0;
+  function show(d){if(track[S.idx]!==n)return;box.innerHTML='';d[0].ayahs.forEach(function(a,i){var w=document.createElement('div');w.className='ay';var x=document.createElement('div');x.className='ar';x.textContent=a.text+' \u06DD'+(i+1);var u=document.createElement('div');u.className='ur';u.textContent=d[1].ayahs[i]?d[1].ayahs[i].text:'';w.appendChild(x);w.appendChild(u);box.appendChild(w)})}
+  if(cache[n])return show(cache[n]);
+  box.textContent='Loading text…';
+  fetch('https://api.alquran.cloud/v1/surah/'+n+'/editions/quran-simple,ur.jalandhry').then(function(r){return r.json()}).then(function(j){cache[n]=j.data;show(j.data)}).catch(function(){box.textContent='Could not load the text. Check internet.'});
+}
+$('rc').onchange=function(){S.rid=+$('rc').value;S.mid=0;fillMo();save();tick()};
+$('mo').onchange=function(){S.mid=+$('mo').value;fillMo();save();tick()};
+$('su').onchange=function(){var i=track.indexOf(+$('su').value);if(i>=0){load(i);tick()}};
 $('city').innerHTML=Object.keys(CITIES).map(function(c){return'<option>'+c+'</option>'}).join('');
 function bind(id,k,num){var el=$(id);el.value=S[k];el.onchange=function(){S[k]=num?(parseFloat(el.value)||0):el.value;save();render();tick()}}
 bind('city','city');bind('meth','m');bind('az','az',1);bind('sr','sr',1);bind('zw','zw',1);bind('ss','ss',1);bind('pr','pr',1);
 $('adj').innerHTML=P.map(function(p){return'<div><label for="a'+p+'">'+p+' (min)</label><input id="a'+p+'" type="number" min="-30" max="30"></div>'}).join('');
 P.forEach(function(p){var el=$('a'+p);el.value=S.adj[p]||0;el.onchange=function(){S.adj[p]=parseFloat(el.value)||0;save();render();tick()}});
+function nums(id,a,b,f){var h='';for(var i=a;i<=b;i+=(f||1))h+='<option value="'+i+'">'+(id==='sm'&&i<10?'0'+i:i)+'</option>';$(id).innerHTML=h}
+nums('sh',1,12);nums('sm',0,45,15);nums('hr',1,24);
+['md','sc','sa','as'].forEach(function(k){var id={md:'md',sc:'sc',sa:'sa',as:'as'}[k];bind(id,k)});
+bind('tr','tr',1);bind('sh','sh',1);bind('sm','sm',1);bind('hr','hr',1);
+function cu(){$('cu').className='g'+(S.sc==='custom'?'':' hide')}cu();$('sc').addEventListener('change',cu);
+$('tr').addEventListener('change',function(){loadText(track[S.idx])});
 fillRc();render();tick();setInterval(tick,1000);setInterval(render,6e4);
-fetch('https://www.mp3quran.net/api/v3/suwar?language=eng').then(function(r){return r.json()}).then(function(j){j.suwar.forEach(function(s){names[s.id]=s.name.trim()});tick()}).catch(function(){});
+fetch('https://www.mp3quran.net/api/v3/suwar?language=eng').then(function(r){return r.json()}).then(function(j){j.suwar.forEach(function(s){names[s.id]=s.name.trim()});fillSu();shownm();tick()}).catch(function(){});
+fetch('https://www.mp3quran.net/api/v3/suwar?language=ar').then(function(r){return r.json()}).then(function(j){j.suwar.forEach(function(x){namesAr[x.id]=x.name.trim()});shownm()}).catch(function(){});
 fetch('https://www.mp3quran.net/api/v3/reciters?language=eng').then(function(r){return r.json()}).then(function(j){
   var out=[];j.reciters.forEach(function(r){
     var ms=r.moshaf.filter(function(m){return m.surah_total>=114}).map(function(m){return{id:m.id,name:m.name,server:m.server,list:m.surah_list.split(',').map(Number)}});
