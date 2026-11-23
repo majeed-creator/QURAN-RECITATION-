@@ -3,190 +3,247 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0d1f1c">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon-192.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap">
+<meta name="theme-color" content="#0a2e29">
 <meta name="description" content="Free Quran player: all-day recitation that pauses for azan and prohibited times, with Urdu translation and highlighted verses.">
 <meta property="og:title" content="Quran Player">
 <meta property="og:description" content="Free Quran recitation with azan pauses, Urdu translation and highlighted verses.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap">
 <title>Quran Player</title>
 <style>
-:root{--bg:#0d1f1c;--card:#14302b;--ink:#e6f0ec;--mute:#9ab3ac;--line:#2b4f47;--azan:#3fb58c;--proh:#e08a5c;color-scheme:dark}
+:root{--bg:#0a2e29;--bg2:#071f1c;--card:#0f3a34;--ink:#f6ecd2;--mute:#bdb192;--gold:#d8b45e;--gold2:#a9852f;--line:rgba(216,180,94,.38);--azan:#4cc9a0;--proh:#e0845a;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:22px/1.5 system-ui,Roboto,sans-serif}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font:20px/1.55 system-ui,Roboto,"Segoe UI",sans-serif;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23d8b45e' stroke-opacity='.13' stroke-width='1.2'%3E%3Cpath d='M40.0 6.0 L45.7 26.1 L64.0 16.0 L53.9 34.3 L74.0 40.0 L53.9 45.7 L64.0 64.0 L45.7 53.9 L40.0 74.0 L34.3 53.9 L16.0 64.0 L26.1 45.7 L6.0 40.0 L26.1 34.3 L16.0 16.0 L34.3 26.1Z'/%3E%3Ccircle cx='40' cy='40' r='9'/%3E%3C/g%3E%3C/svg%3E") ;background-attachment:fixed}
 body.ur{font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",system-ui,serif;line-height:2}
-main{max-width:1000px;margin:0 auto;padding:20px 28px 60px}
-h1{font:700 3rem/1.3 Amiri,serif;margin:0;text-align:center}
-h2{font-size:1.1rem;margin:0 0 8px}
-section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:18px}
-.top{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;align-items:center}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;max-width:640px;max-height:90vh;overflow:auto}
-.card p{margin:10px 0}
-.top select{width:auto;padding:8px 14px}
-.status{font-size:2rem;font-weight:700;margin:0}
-.dot{display:inline-block;width:18px;height:18px;border-radius:50%;background:var(--mute);margin-right:12px}
-.dot.play{background:var(--azan)}.dot.hold{background:var(--proh)}
-.note{color:var(--mute);margin:6px 0 0}
-.sn1{font:700 2.6rem/1.5 Amiri,serif;margin:6px 0 0;text-align:center}.sn2{text-align:center;color:var(--mute);margin:0}
-button,select,input{font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:12px 20px}
-input[type=range]{padding:0;width:100%}
-input[type=file]{padding:8px;width:100%}
-button.main{background:var(--azan);color:#04201a;font-weight:700;border-color:var(--azan);min-width:200px}
-button:focus,select:focus,input:focus,summary:focus{outline:5px solid #fff;outline-offset:3px}
-.sm{padding:8px 14px;font-size:.8em}
-.row{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;align-items:center}
-.bar{position:relative;height:40px;background:var(--bg);border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+h1,h2,h3{font-family:Amiri,"Times New Roman",serif;color:var(--gold);margin:0;font-weight:700}
+h2{font-size:1.35rem}h3{font-size:1.1rem;margin:14px 0 6px}
+a{color:var(--gold)}
+.hero{text-align:center;padding:12px 16px 4px;background:linear-gradient(var(--bg2),rgba(7,31,28,0))}
+.tools{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;align-items:center;max-width:1280px;margin:0 auto}
+.tools select{width:auto;padding:8px 14px}
+.skyline{display:block;margin:4px auto 0;width:min(520px,88%);height:auto}
+h1{font-size:3.4rem;line-height:1.3;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.tag{margin:0;color:var(--mute);letter-spacing:.06em}
+.hero::after{content:"\2756  \2756  \2756";display:block;color:var(--gold);letter-spacing:.5em;margin:6px 0 2px;opacity:.8}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:22px;max-width:1280px;margin:0 auto;padding:10px 20px 50px;align-items:start}
+.niche{text-align:center;border:2px solid var(--gold);border-radius:50% 50% 22px 22px/130px 130px 22px 22px;padding:46px 22px 24px;background:radial-gradient(ellipse at 50% 0,#17554b 0,var(--card) 62%);box-shadow:inset 0 0 0 6px var(--bg2),inset 0 0 0 7px var(--line),0 12px 32px rgba(0,0,0,.4)}
+.sn1{font:700 2.8rem/1.5 Amiri,serif;margin:0;color:var(--gold)}
+.sn2{margin:0;color:var(--mute)}
+.status{font:700 1.5rem/1.4 Amiri,serif;margin:10px 0 0}
+.dot{display:inline-block;width:16px;height:16px;border-radius:50%;background:var(--mute);margin-right:10px;vertical-align:middle}
+.dot.play{background:var(--azan);box-shadow:0 0 10px var(--azan)}.dot.hold{background:var(--proh)}
+.note{color:var(--mute);margin:6px 0 0;font-size:.92em}
+.cd{font-weight:700;color:var(--ink);margin:4px 0 0}
+#ap{color:#fff3c4;background:rgba(224,132,90,.25);border:1px solid var(--proh);border-radius:10px;padding:8px 12px;font-weight:700}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.niche .row{justify-content:center}
+button,select,input{font:inherit;color:var(--ink);background:#082722;border:2px solid var(--line);border-radius:12px;padding:11px 18px}
+button{background:transparent;color:var(--gold);border-color:var(--gold);cursor:pointer;font-weight:600}
+button:hover{background:rgba(216,180,94,.12)}
+button.main{background:linear-gradient(#ecd48f,var(--gold2));color:#1a1305;border-color:var(--gold);min-width:190px;font-weight:700;font-size:1.05em}
+button:focus,select:focus,input:focus,summary:focus,#tx:focus{outline:4px solid #fff3c4;outline-offset:3px}
+.sm{padding:7px 13px;font-size:.8em}
+select,input[type=text],input[type=number],input[type=url],input:not([type]),input[type=file]{width:100%}
+input[type=range]{padding:0;width:100%;accent-color:var(--gold);background:none;border:0}
+input[type=file]{padding:8px}
+label{display:block;color:var(--mute);font-size:.85em;margin:10px 0 4px}
+.mushaf{margin-top:20px;border:2px solid var(--gold);border-radius:20px;background:rgba(8,39,34,.92);padding:10px;box-shadow:inset 0 0 0 5px var(--bg2),inset 0 0 0 6px var(--line)}
+#tx{max-height:min(62vh,640px);overflow-y:auto;padding:6px 12px;position:relative;scroll-behavior:smooth;border-radius:12px}
+.ay{padding:12px 16px;border-radius:14px;border:2px solid transparent;cursor:pointer}
+.ay+.ay{border-top:1px solid rgba(216,180,94,.18)}
+.ay.on{background:linear-gradient(90deg,rgba(216,180,94,.26),rgba(216,180,94,.08));border-color:var(--gold)}.ay.on div{color:#fff!important}
+.ar{font:400 calc(2rem*var(--fs,1))/2.2 Amiri,serif;direction:rtl;text-align:right;color:var(--ink)}
+.ur{font:400 calc(1.35rem*var(--fs,1))/2.6 "Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;direction:rtl;text-align:right;color:#cfe8dc}
+.en{font-size:calc(1.1rem*var(--fs,1));color:#cfe8dc;text-align:left;direction:ltr}
+.tf{font:400 calc(1rem*var(--fs,1))/1.9 Amiri,serif;direction:rtl;text-align:right;color:var(--mute);margin-top:4px}
+.side{background:rgba(15,58,52,.96);border:2px solid var(--gold);border-radius:20px;box-shadow:inset 0 0 0 5px var(--bg2),inset 0 0 0 6px var(--line),0 12px 32px rgba(0,0,0,.4);position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;padding:8px 14px 14px}
+.sidehead{display:flex;justify-content:space-between;align-items:center;padding:10px 4px 6px;border-bottom:1px solid var(--line)}
+details.opt{border-bottom:1px solid var(--line)}
+details.opt>summary{list-style:none;cursor:pointer;padding:14px 4px;font:700 1.2rem Amiri,serif;color:var(--gold);display:flex;justify-content:space-between;align-items:center}
+details.opt>summary::-webkit-details-marker{display:none}
+details.opt>summary::before{content:"\2726";margin-right:10px;font-size:.8em}
+details.opt>summary::after{content:"\25BE";margin-left:auto}
+details.opt[open]>summary::after{content:"\25B4"}
+details.opt>div.in{padding:0 4px 14px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hide{display:none!important}
+.bar{position:relative;height:36px;background:#082722;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
 .seg{position:absolute;top:0;bottom:0;min-width:3px}.seg.a{background:var(--azan)}.seg.p{background:var(--proh)}
 .now{position:absolute;top:0;bottom:0;width:4px;background:#fff}
-table{width:100%;border-collapse:collapse;margin-top:12px}
-td,th{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}th{color:var(--mute)}
-label{display:block;color:var(--mute);font-size:.85em;margin:8px 0 4px}
-select{width:100%}
-summary{cursor:pointer;font-weight:700;padding:6px}
-.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.hide{display:none!important}
-#tx{max-height:520px;overflow-y:auto;padding:4px 8px;position:relative;scroll-behavior:smooth;margin-top:12px}
-.ay{padding:12px 14px;border-radius:14px;border:2px solid transparent;cursor:pointer}
-.ay.on{background:#1d5a4a;border-color:var(--azan)}.ay.on div{color:#fff!important}
-.ar{font:400 calc(1.9rem*var(--fs,1))/2.2 Amiri,serif;direction:rtl;text-align:right}
-.ur{font:400 calc(1.35rem*var(--fs,1))/2.6 "Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;direction:rtl;text-align:right;color:#bfe3d6}
-.en{font-size:calc(1.1rem*var(--fs,1));color:#bfe3d6;text-align:left;direction:ltr}
-.tf{font:400 calc(1rem*var(--fs,1))/1.9 Amiri,serif;direction:rtl;text-align:right;color:var(--mute);margin-top:4px}
-.pi{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
-.legend{display:flex;gap:18px;color:var(--mute);font-size:.8em;margin-top:6px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;color:var(--mute);font-size:.8em;margin-top:6px}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.92em}
+td,th{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line)}th{color:var(--mute)}
+.pi{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:.9em}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;padding:20px;z-index:60}
+.card{background:var(--card);border:2px solid var(--gold);border-radius:22px;padding:26px;max-width:640px;max-height:90vh;overflow:auto;box-shadow:inset 0 0 0 5px var(--bg2),inset 0 0 0 6px var(--line)}
+.card p{margin:10px 0}
+#opt,#cl{display:none}
 #prt{display:none;direction:ltr}
 @page{margin:16mm}
-@media print{body{background:#fff}main>*:not(#prt){display:none!important}#prt{display:block!important}#prt *{color:#000!important;background:none!important}#prt .ay{border:0;border-bottom:1px solid #ccc;break-inside:avoid}#prt h2{text-align:center;font:700 2rem Amiri,serif}}
+@media (max-width:960px){
+  .layout{grid-template-columns:1fr;padding:8px 12px 40px}
+  #opt,#cl{display:inline-block}
+  .side{position:fixed;top:0;right:0;bottom:0;width:min(92vw,440px);max-height:none;border-radius:0;transform:translateX(105%);visibility:hidden;transition:transform .25s,visibility .25s;z-index:40}
+  .side.open{transform:none;visibility:visible}
+  h1{font-size:2.6rem}
+  .niche{border-radius:50% 50% 20px 20px/90px 90px 20px 20px;padding-top:36px}
+}
+@media (max-width:600px){body{font-size:17px}.sn1{font-size:2.2rem}}
+@media print{body{background:#fff}body>*:not(#prt){display:none!important}#prt{display:block!important}#prt *{color:#000!important;background:none!important}#prt .ay{border:0;border-bottom:1px solid #ccc;break-inside:avoid}#prt h2{text-align:center;font:700 2rem Amiri,serif}}
 </style>
 </head>
 <body>
-<main>
-<div class="top"><button class="sm" id="hp" aria-label="Help">?</button><button class="sm" id="shb" data-t="share"></button><button class="sm" id="wab" data-t="wa"></button><button class="sm hide" id="inb" data-t="inst"></button><select id="lg" aria-label="Language"><option value="en">English</option><option value="ur">اردو</option></select></div>
-<p class="note hide" id="ih" data-t="ios" style="text-align:right"></p><p class="note" id="im" style="text-align:right"></p>
-<h1>القرآن الكريم</h1>
-
-<section>
-  <p class="status"><span class="dot" id="dot"></span><span id="st"></span></p>
-  <p class="sn1" id="nma"></p><p class="sn2" id="nme"></p>
-  <p class="note" id="sn"></p>
-  <p class="note" id="dt"></p>
-  <p class="note" id="cd" style="font-weight:700;color:var(--ink)"></p>
-  <p class="note hide" id="ap" data-t="tap" style="color:var(--proh);font-weight:700"></p>
-  <div class="row">
-    <button class="main" id="go" data-t="start"></button>
-    <button id="pv" data-t="prev"></button>
-    <button id="nx" data-t="next"></button>
-    <button id="fv" aria-label="Favorite">☆</button>
+<header class="hero">
+  <div class="tools">
+    <button class="sm" id="opt" data-t="b_opt"></button>
+    <button class="sm" id="hp" aria-label="Help">?</button>
+    <button class="sm" id="shb" data-t="share"></button>
+    <button class="sm" id="wab" data-t="wa"></button>
+    <button class="sm hide" id="inb" data-t="inst"></button>
+    <select id="lg" aria-label="Language"><option value="en">English</option><option value="ur">اردو</option></select>
   </div>
-  <div class="g">
-    <div><label for="vo" data-t="l_vol"></label><input id="vo" type="range" min="0" max="100"></div>
-    <div><label for="sl" data-t="l_sleep"></label><select id="sl"><option value="0" data-t="o_off"></option><option value="15">15</option><option value="30">30</option><option value="60">60</option><option value="90">90</option><option value="120">120</option></select></div>
-  </div>
-</section>
+  <p class="note hide" id="ih" data-t="ios"></p><p class="note" id="im"></p>
+  <svg class="skyline" viewBox="0 0 640 150" aria-hidden="true">
+<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ecd48f"/><stop offset="1" stop-color="#a9852f"/></linearGradient></defs>
+<g fill="url(#gg)">
+<rect x="70" y="52" width="22" height="98"/><path d="M66 52Q81 20 96 52Z"/><rect x="63" y="70" width="36" height="5"/><path d="M81 20V8" stroke="#d8b45e" stroke-width="2"/>
+<rect x="548" y="52" width="22" height="98"/><path d="M544 52Q559 20 574 52Z"/><rect x="541" y="70" width="36" height="5"/><path d="M559 20V8" stroke="#d8b45e" stroke-width="2"/>
+<path d="M150 150V112Q190 66 230 112V150Z"/><path d="M410 150V112Q450 66 490 112V150Z"/>
+<rect x="250" y="96" width="140" height="54"/>
+<path d="M250 96Q250 36 320 22Q390 36 390 96Z"/>
+<path d="M320 22V10" stroke="#d8b45e" stroke-width="2"/>
+<path d="M327 2A8 8 0 1 0 327 18A6.5 6.5 0 1 1 327 2Z"/>
+<rect x="30" y="148" width="580" height="2"/>
+</g>
+<g fill="#0a2e29">
+<path d="M300 150V128Q300 108 320 108Q340 108 340 128V150Z"/>
+<path d="M262 132V118Q262 108 270 108Q278 108 278 118V132Z"/><path d="M362 132V118Q362 108 370 108Q378 108 378 118V132Z"/>
+<path d="M172 150V128Q172 118 190 118Q208 118 208 128V150Z"/><path d="M432 150V128Q432 118 450 118Q468 118 468 128V150Z"/>
+<path d="M76 100V92Q76 86 81 86Q86 86 86 92V100Z"/><path d="M554 100V92Q554 86 559 86Q564 86 564 92V100Z"/>
+</g></svg>
+  <h1>القرآن الكريم</h1>
+  <p class="tag" data-t="tagline"></p>
+</header>
 
-<section>
-  <h2 data-t="h_loc"></h2>
-  <p class="note" id="lp" style="margin:0 0 8px"></p>
-  <div class="row"><button id="gl" data-t="b_gl"></button></div>
-  <div class="row"><input id="cs" data-ph="ph_city" style="flex:1;min-width:200px"><button id="csb" data-t="b_search"></button></div>
-  <div id="cr" class="row"></div>
-  <div style="margin-top:10px"><label for="city" data-t="l_pk"></label><select id="city"></select></div>
-  <p class="note" id="lm"></p>
-  <p class="note" data-t="tzn"></p>
-</section>
+<div class="layout">
+<main class="stage">
+  <section class="niche">
+    <p class="sn1" id="nma"></p>
+    <p class="sn2" id="nme"></p>
+    <p class="status"><span class="dot" id="dot"></span><span id="st"></span></p>
+    <p class="note" id="sn"></p>
+    <p class="note" id="dt"></p>
+    <p class="cd" id="cd"></p>
+    <p class="note hide" id="ap" data-t="tap"></p>
+    <div class="row">
+      <button class="main" id="go" data-t="start"></button>
+      <button id="pv" data-t="prev"></button>
+      <button id="nx" data-t="next"></button>
+      <button id="fv" aria-label="Favorite">☆</button>
+    </div>
+  </section>
+  <section class="mushaf"><div id="tx" class="hide" tabindex="0"></div></section>
+</main>
 
-<section>
-  <div class="g">
-    <div><label for="vs" data-t="l_vs"></label><select id="vs"><option value="1" data-t="o_show"></option><option value="0" data-t="o_hide"></option></select></div>
-    <div><label for="ed" data-t="l_ed"></label><select id="ed"><option value="ur.jalandhry">اردو – Jalandhry</option><option value="ur.maududi">اردو – Maududi</option><option value="ur.kanzuliman">اردو – Kanzul Iman</option><option value="ur.junagarhi">اردو – Junagarhi</option><option value="en.sahih">English – Sahih International</option><option value="none" data-t="o_none"></option></select></div>
-    <div><label for="tf" data-t="l_tf"></label><select id="tf"><option value="" data-t="o_none"></option><option value="ar.muyassar">تفسير الميسر (Arabic)</option><option value="ar.jalalayn">تفسير الجلالين (Arabic)</option></select></div>
-    <div><label for="fs" data-t="l_fs"></label><select id="fs"><option value="1" data-t="o_norm"></option><option value="1.25" data-t="o_large"></option><option value="1.5" data-t="o_xl"></option></select></div>
-    <div><label for="as" data-t="l_as"></label><select id="as"><option value="1" data-t="o_on"></option><option value="0" data-t="o_off"></option></select></div>
-  </div>
-  <p class="note" id="sy"></p>
-  <div class="row" id="tb"><button class="sm" id="hb" data-t="b_hb"></button><button class="sm" id="hf" data-t="b_hf"></button><span class="note" id="ho"></span></div>
-  <div id="tx" class="hide" tabindex="0"></div>
-</section>
+<aside class="side" id="side">
+  <div class="sidehead"><h2 data-t="b_opt"></h2><button class="sm" id="cl" data-t="b_close"></button></div>
 
-<section>
-  <div class="g">
-    <div><label for="rc" data-t="l_reciter"></label><select id="rc"></select></div>
+  <details class="opt" open><summary data-t="sec_listen"></summary><div class="in">
+    <label for="rc" data-t="l_reciter"></label><select id="rc"></select>
     <div id="mow"><label for="mo" data-t="l_style"></label><select id="mo"></select></div>
-    <div><label for="su" data-t="l_surah"></label><select id="su"></select></div>
-    <div><label for="fvs" data-t="l_fav"></label><select id="fvs"></select></div>
-    <div><label for="md" data-t="l_after"></label><select id="md"><option value="next" data-t="o_cont"></option><option value="repeat" data-t="o_rep"></option></select></div>
-    <div><label for="sc" data-t="l_play"></label><select id="sc"><option value="all" data-t="o_all"></option><option value="custom" data-t="o_set"></option></select></div>
-  </div>
-  <div class="g hide" id="cu">
-    <div><label for="sh" data-t="l_sh"></label><select id="sh"></select></div>
-    <div><label for="sm" data-t="l_sm"></label><select id="sm"></select></div>
-    <div><label for="sa">AM / PM</label><select id="sa"><option>AM</option><option>PM</option></select></div>
-    <div><label for="hr" data-t="l_hr"></label><select id="hr"></select></div>
-  </div>
-</section>
+    <label for="su" data-t="l_surah"></label><select id="su"></select>
+    <label for="fvs" data-t="l_fav"></label><select id="fvs"></select>
+    <label for="md" data-t="l_after"></label><select id="md"><option value="next" data-t="o_cont"></option><option value="repeat" data-t="o_rep"></option></select>
+    <label for="vo" data-t="l_vol"></label><input id="vo" type="range" min="0" max="100">
+    <label for="sl" data-t="l_sleep"></label><select id="sl"><option value="0" data-t="o_off"></option><option value="15">15</option><option value="30">30</option><option value="60">60</option><option value="90">90</option><option value="120">120</option></select>
+  </div></details>
 
-<section>
-  <h2 data-t="h_dl"></h2>
-  <p class="note" style="margin:0" id="dn"></p>
-  <div class="row"><button id="dpdf" data-t="b_pdf"></button><button id="daud" data-t="b_aud"></button><button id="dvid" data-t="b_vid"></button></div>
-  <div class="row"><button id="soff" data-t="b_off"></button><button class="alt" id="xoff" data-t="b_offx"></button><span class="note" id="oc"></span></div>
-  <div class="row"><button class="sm" id="sfav" data-t="b_sfav"></button><button class="sm" id="sall" data-t="b_sall"></button><button class="sm" id="stx" data-t="b_stx"></button><span class="note" id="os"></span></div>
-  <p class="note" id="dm"></p>
-</section>
-
-<section>
-  <h2 data-t="h_sched"></h2>
-  <div class="bar" id="bar"><div class="now" id="nowm"></div></div>
-  <div class="legend"><span><i style="background:var(--azan)"></i><span data-t="lg_a"></span></span><span><i style="background:var(--proh)"></i><span data-t="lg_p"></span></span></div>
-  <table><thead><tr><th data-t="th_p"></th><th data-t="th_t"></th><th data-t="th_q"></th></tr></thead><tbody id="tt"></tbody></table>
-</section>
-
-<section>
-  <h2 data-t="h_plan"></h2>
-  <div id="pl"></div>
-  <div class="g" style="margin-top:10px">
-    <div><label for="pd" data-t="l_day"></label><select id="pd"><option value="all" data-t="o_every"></option><option value="fri" data-t="o_fri"></option></select></div>
-    <div><label for="ph" data-t="l_sh"></label><select id="ph"></select></div>
-    <div><label for="pm" data-t="l_sm"></label><select id="pm"></select></div>
-    <div><label for="pa">AM / PM</label><select id="pa"><option>AM</option><option>PM</option></select></div>
-    <div><label for="ps" data-t="l_surah"></label><select id="ps"></select></div>
-    <div><label for="pn" data-t="l_after"></label><select id="pn"><option value="next" data-t="o_cont"></option><option value="repeat" data-t="o_rep"></option></select></div>
-  </div>
-  <div class="row"><button id="padd" data-t="b_add"></button><button id="pkh" data-t="b_kahf"></button></div>
-</section>
-
-<section>
-  <details>
-    <summary data-t="h_set"></summary>
+  <details class="opt"><summary data-t="sec_when"></summary><div class="in">
+    <label for="sc" data-t="l_play"></label><select id="sc"><option value="all" data-t="o_all"></option><option value="custom" data-t="o_set"></option></select>
+    <div class="g hide" id="cu">
+      <div><label for="sh" data-t="l_sh"></label><select id="sh"></select></div>
+      <div><label for="sm" data-t="l_sm"></label><select id="sm"></select></div>
+      <div><label for="sa">AM / PM</label><select id="sa"><option>AM</option><option>PM</option></select></div>
+      <div><label for="hr" data-t="l_hr"></label><select id="hr"></select></div>
+    </div>
+    <h3 data-t="h_plan"></h3>
+    <div id="pl"></div>
     <div class="g">
-      <div><label for="meth" data-t="l_meth"></label><select id="meth"><option value="k" data-t="m_k"></option><option value="m" data-t="m_m"></option><option value="i" data-t="m_i"></option><option value="e" data-t="m_e"></option><option value="u" data-t="m_u"></option></select></div>
+      <div><label for="pd" data-t="l_day"></label><select id="pd"><option value="all" data-t="o_every"></option><option value="fri" data-t="o_fri"></option></select></div>
+      <div><label for="ps" data-t="l_surah"></label><select id="ps"></select></div>
+      <div><label for="ph" data-t="l_sh"></label><select id="ph"></select></div>
+      <div><label for="pm" data-t="l_sm"></label><select id="pm"></select></div>
+      <div><label for="pa">AM / PM</label><select id="pa"><option>AM</option><option>PM</option></select></div>
+      <div><label for="pn" data-t="l_after"></label><select id="pn"><option value="next" data-t="o_cont"></option><option value="repeat" data-t="o_rep"></option></select></div>
+    </div>
+    <div class="row"><button class="sm" id="padd" data-t="b_add"></button><button class="sm" id="pkh" data-t="b_kahf"></button></div>
+  </div></details>
+
+  <details class="opt"><summary data-t="sec_verses"></summary><div class="in">
+    <label for="vs" data-t="l_vs"></label><select id="vs"><option value="1" data-t="o_show"></option><option value="0" data-t="o_hide"></option></select>
+    <label for="ed" data-t="l_ed"></label><select id="ed"><option value="ur.jalandhry">اردو – Jalandhry</option><option value="ur.maududi">اردو – Maududi</option><option value="ur.kanzuliman">اردو – Kanzul Iman</option><option value="ur.junagarhi">اردو – Junagarhi</option><option value="en.sahih">English – Sahih International</option><option value="none" data-t="o_none"></option></select>
+    <label for="tf" data-t="l_tf"></label><select id="tf"><option value="" data-t="o_none"></option><option value="ar.muyassar">تفسير الميسر (Arabic)</option><option value="ar.jalalayn">تفسير الجلالين (Arabic)</option></select>
+    <label for="fs" data-t="l_fs"></label><select id="fs"><option value="1" data-t="o_norm"></option><option value="1.25" data-t="o_large"></option><option value="1.5" data-t="o_xl"></option></select>
+    <label for="as" data-t="l_as"></label><select id="as"><option value="1" data-t="o_on"></option><option value="0" data-t="o_off"></option></select>
+    <p class="note" id="sy"></p>
+    <div class="row" id="tb"><button class="sm" id="hb" data-t="b_hb"></button><button class="sm" id="hf" data-t="b_hf"></button><span class="note" id="ho"></span></div>
+  </div></details>
+
+  <details class="opt"><summary data-t="sec_pray"></summary><div class="in">
+    <p class="note" id="lp" style="margin:0 0 8px"></p>
+    <div class="row" style="margin-top:0"><button id="gl" data-t="b_gl"></button></div>
+    <div class="row"><input id="cs" data-ph="ph_city" style="flex:1;min-width:160px"><button id="csb" data-t="b_search"></button></div>
+    <div id="cr" class="row"></div>
+    <label for="city" data-t="l_pk"></label><select id="city"></select>
+    <p class="note" id="lm"></p>
+    <label for="meth" data-t="l_meth"></label><select id="meth"><option value="k" data-t="m_k"></option><option value="m" data-t="m_m"></option><option value="i" data-t="m_i"></option><option value="e" data-t="m_e"></option><option value="u" data-t="m_u"></option></select>
+    <p class="note" data-t="tzn"></p>
+    <h3 data-t="h_sched"></h3>
+    <div class="bar" id="bar"><div class="now" id="nowm"></div></div>
+    <div class="legend"><span><i style="background:var(--azan)"></i><span data-t="lg_a"></span></span><span><i style="background:var(--proh)"></i><span data-t="lg_p"></span></span></div>
+    <table><thead><tr><th data-t="th_p"></th><th data-t="th_t"></th><th data-t="th_q"></th></tr></thead><tbody id="tt"></tbody></table>
+  </div></details>
+
+  <details class="opt"><summary data-t="sec_azan"></summary><div class="in">
+    <div class="g">
       <div><label for="az" data-t="l_az"></label><input id="az" type="number" min="1" max="60"></div>
       <div><label for="jm" data-t="l_jm"></label><input id="jm" type="number" min="10" max="180"></div>
       <div><label for="sr" data-t="l_sr"></label><input id="sr" type="number" min="0" max="60"></div>
       <div><label for="zw" data-t="l_zw"></label><input id="zw" type="number" min="0" max="60"></div>
       <div><label for="ss" data-t="l_ss"></label><input id="ss" type="number" min="0" max="60"></div>
       <div><label for="pr" data-t="l_pr"></label><select id="pr"><option value="1" data-t="o_yes"></option><option value="0" data-t="o_no"></option></select></div>
-      <div><label for="hj" data-t="l_hj"></label><select id="hj"><option value="-1">-1</option><option value="0">0</option><option value="1">+1</option></select></div>
-      <div><label for="auto" data-t="l_auto"></label><select id="auto"><option value="1" data-t="o_yes"></option><option value="0" data-t="o_no"></option></select></div>
-      <div><label for="azOn" data-t="l_azs"></label><select id="azOn"><option value="1" data-t="o_yes"></option><option value="0" data-t="o_no"></option></select></div>
-      <div><label for="azf" data-t="l_azf"></label><input id="azf" type="file" accept="audio/*"></div>
-      <div><label for="fjf" data-t="l_fjf"></label><input id="fjf" type="file" accept="audio/*"></div>
-      <div><label for="azu" data-t="l_azu"></label><input id="azu" type="url" placeholder="https://"></div>
     </div>
+    <label for="azOn" data-t="l_azs"></label><select id="azOn"><option value="1" data-t="o_yes"></option><option value="0" data-t="o_no"></option></select>
+    <label for="azf" data-t="l_azf"></label><input id="azf" type="file" accept="audio/*">
+    <label for="fjf" data-t="l_fjf"></label><input id="fjf" type="file" accept="audio/*">
+    <label for="azu" data-t="l_azu"></label><input id="azu" type="url" placeholder="https://">
     <div class="row"><button class="sm" id="ta" data-t="b_test"></button><span class="note" id="am"></span></div>
     <p class="note" data-t="l_adj"></p>
     <div class="g" id="adj"></div>
-  </details>
-  <p class="note" data-t="note_tv"></p>
-</section>
-<section>
-  <h2 data-t="h_about"></h2>
-  <p class="note" data-t="about"></p>
-  <p class="note"><a href="privacy.html" data-t="privacy" style="color:var(--azan)"></a></p>
-</section>
+  </div></details>
+
+  <details class="opt"><summary data-t="h_dl"></summary><div class="in">
+    <p class="note" style="margin:0" id="dn"></p>
+    <div class="row"><button class="sm" id="dpdf" data-t="b_pdf"></button><button class="sm" id="daud" data-t="b_aud"></button><button class="sm" id="dvid" data-t="b_vid"></button></div>
+    <div class="row"><button class="sm" id="soff" data-t="b_off"></button><button class="sm" id="xoff" data-t="b_offx"></button></div>
+    <div class="row"><button class="sm" id="sfav" data-t="b_sfav"></button><button class="sm" id="sall" data-t="b_sall"></button><button class="sm" id="stx" data-t="b_stx"></button></div>
+    <p class="note" id="oc"></p><p class="note" id="os"></p><p class="note" id="dm"></p>
+  </div></details>
+
+  <details class="opt"><summary data-t="sec_more"></summary><div class="in">
+    <label for="hj" data-t="l_hj"></label><select id="hj"><option value="-1">-1</option><option value="0">0</option><option value="1">+1</option></select>
+    <label for="auto" data-t="l_auto"></label><select id="auto"><option value="1" data-t="o_yes"></option><option value="0" data-t="o_no"></option></select>
+    <h3 data-t="h_about"></h3>
+    <p class="note" data-t="about"></p>
+    <p class="note"><a href="privacy.html" data-t="privacy"></a></p>
+    <p class="note" data-t="note_tv"></p>
+  </div></details>
+</aside>
+</div>
+
 <div id="wl" class="ov hide" role="dialog" aria-modal="true"><div class="card">
   <h2 data-t="w_title" style="font-size:1.6rem"></h2>
   <p data-t="w1"></p><p data-t="w2"></p><p data-t="w3"></p><p data-t="w4"></p>
@@ -194,7 +251,6 @@ summary{cursor:pointer;font-weight:700;padding:6px}
 </div></div>
 <div id="prt"></div>
 <audio id="au"></audio>
-</main>
 <script>
 (function(){
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
@@ -207,8 +263,8 @@ try{Object.assign(S,JSON.parse(localStorage.getItem('qv3')||'{}'))}catch(e){}
 var $=function(i){return document.getElementById(i)},au=$('au');
 function save(){try{localStorage.setItem('qv3',JSON.stringify(S))}catch(e){}}
 /* ---------- language ---------- */
-var T={en:{privacy:'Privacy policy',b_sfav:'Save favorites offline',b_sall:'Save whole Quran offline',b_stx:'Save all verses text offline',l_store:'Storage (MB)',off_prog:'Saving',off_done:'Saved',off_stop:'press the button again to stop',off_warn:'The whole Quran can need several GB of space and a long time. Continue?',off_nofav:'No favorites yet. Tap the star on a surah first.',sy_ref:'Improved estimate based on a reference reciter. Use the buttons to adjust.',share:'Share',wa:'WhatsApp',inst:'Install app',ios:'On iPhone: tap Share, then Add to Home Screen.',h_loc:'Your location',b_gl:'Use my location',b_search:'Search',ph_city:'Search any city in the world',l_pk:'Pakistan quick pick',o_pick:'Choose a city…',l_cur:'Current location',myloc:'My location',loc_set:'Location saved. The calculation method was set automatically; change it in Settings if your mosque uses another.',loc_err:'Could not get your location. Allow location access, or search for your city.',no_res:'No results.',srch_err:'Could not search. Check internet.',tzn:'Prayer times use this device’s time zone and can differ by a few minutes from your mosque.',w_title:'Welcome',w1:'1. Press Start to play the Quran. It pauses for azan and prohibited prayer times.',w2:'2. Set your location so prayer times are correct.',w3:'3. Choose a reciter and surah. The verse being recited is highlighted, with translation.',w4:'4. Free, no account. Your settings stay on your device.',b_ok:'Got it',share_txt:'Free Quran player with azan pauses, Urdu translation and highlighted verses:',copied:'Link copied. Paste it to share.',m_i:'ISNA (North America)',m_e:'Egyptian',m_u:'Umm al-Qura (Makkah)',h_about:'About',about:'Free to use, with no account. Settings are saved only on this device. Recitation audio: mp3quran.net and quran.com. Verses, translations and tafseer: alquran.cloud. City search: Open-Meteo. Please check each service’s terms before wider use.',start:'Start',stop:'Stop',prev:'Previous',next:'Next surah',s_stopped:'Stopped',s_playing:'Playing',s_paused:'Paused for',s_outside:'Outside your play hours',s_resumes:'Resumes at',s_next:'Next pause',s_until:'Plays until',s_press:'Press OK on Start.',s_err:'Connection problem. Retrying…',s_txterr:'Could not load the verses. Check internet.',loading:'Loading verses…',tap:'Press OK or tap anywhere to start playing.',l_vol:'Volume',l_sleep:'Sleep timer (minutes)',o_off:'Off',o_on:'On',l_reciter:'Reciter (qari)',g_q:'Exact verse sync',g_m:'Estimated verse sync',l_style:'Recitation style',l_surah:'Surah',l_fav:'Favorites',l_after:'After the surah ends',o_cont:'Continue to next surah',o_rep:'Repeat this surah',l_play:'Play time',o_all:'All day (24 hours)',o_set:'Only for set hours',l_sh:'Start hour',l_sm:'Start minute',l_hr:'Play for (hours)',l_vs:'Verses',o_show:'Show',o_hide:'Hide',l_ed:'Translation',o_none:'None',l_tf:'Tafseer',l_fs:'Text size',o_norm:'Normal',o_large:'Large',o_xl:'Extra large',l_as:'Follow the verse being recited',b_hb:'Highlight earlier',b_hf:'Highlight later',sy_exact:'Exact verse sync with this reciter.',sy_est:'Estimated verse sync. Use the buttons to adjust.',h_dl:'Download and offline',b_pdf:'PDF',b_aud:'Audio (MP3)',b_vid:'Video (record)',b_vidx:'Stop video',b_off:'Save this surah offline',b_offx:'Delete offline files',l_saved:'Saved offline',h_sched:'Today’s schedule',th_p:'Prayer',th_t:'Time',th_q:'Quran pauses',p_Fajr:'Fajr',p_Sunrise:'Sunrise',p_Dhuhr:'Dhuhr',p_Asr:'Asr',p_Maghrib:'Maghrib',p_Isha:'Isha',azan:'azan',jumuah:'Jumu’ah',w_sr:'Sunrise (prohibited time)',w_zw:'Noon (prohibited time)',w_ss:'Sunset (prohibited time)',lg_a:'Azan pause',lg_p:'Prohibited time',nextprayer:'Next prayer',in:'in',not_paused:'Not paused',h_plan:'Daily plan',l_day:'Day',o_every:'Every day',o_fri:'Friday only',b_add:'Add to plan',b_kahf:'Add Friday: Surah Al-Kahf',pl_none:'No plan items yet.',h_set:'Settings',l_city:'City',l_meth:'Calculation method',m_k:'Karachi (Hanafi Asr)',m_m:'Muslim World League',l_az:'Pause after azan (min)',l_jm:'Friday Jumu’ah pause (min)',l_sr:'After sunrise (min)',l_zw:'Before Dhuhr (min)',l_ss:'Before Maghrib (min)',l_pr:'Pause at sunrise, noon, sunset',o_yes:'Yes',o_no:'No',l_hj:'Hijri date adjust (days)',l_auto:'Start automatically when opened',l_azs:'Play azan sound',l_azf:'Azan sound file',l_fjf:'Fajr azan file (optional)',l_azu:'Or azan link',b_test:'Test azan',l_adj:'Adjust minutes per prayer to match your mosque:',note_tv:'Set the TV time zone correctly and turn off the screensaver. Azan sounds are not included; add your own file or link.',saved:'Saved.',nofile:'No azan file or link set.'},
-ur:{privacy:'پرائیویسی پالیسی',b_sfav:'پسندیدہ سورتیں آف لائن محفوظ کریں',b_sall:'پورا قرآن آف لائن محفوظ کریں',b_stx:'تمام آیات کا متن آف لائن محفوظ کریں',l_store:'اسٹوریج (MB)',off_prog:'محفوظ ہو رہا ہے',off_done:'محفوظ ہوا',off_stop:'روکنے کے لیے دوبارہ بٹن دبائیں',off_warn:'پورے قرآن کے لیے کئی GB جگہ اور کافی وقت درکار ہو سکتا ہے۔ جاری رکھیں؟',off_nofav:'ابھی کوئی پسندیدہ سورۃ نہیں۔ پہلے سورۃ پر ستارہ دبائیں۔',sy_ref:'ایک حوالہ قاری کی بنیاد پر بہتر اندازہ۔ بٹنوں سے درست کریں۔',share:'شیئر کریں',wa:'واٹس ایپ',inst:'ایپ انسٹال کریں',ios:'آئی فون پر: شیئر دبائیں، پھر Add to Home Screen۔',h_loc:'آپ کا مقام',b_gl:'میرا مقام استعمال کریں',b_search:'تلاش',ph_city:'دنیا کا کوئی بھی شہر تلاش کریں',l_pk:'پاکستان کے شہر',o_pick:'شہر منتخب کریں…',l_cur:'موجودہ مقام',myloc:'میرا مقام',loc_set:'مقام محفوظ ہو گیا۔ حساب کا طریقہ خود بخود چنا گیا؛ اگر آپ کی مسجد کا طریقہ مختلف ہو تو ترتیبات میں بدل لیں۔',loc_err:'آپ کا مقام معلوم نہیں ہو سکا۔ مقام کی اجازت دیں یا اپنا شہر تلاش کریں۔',no_res:'کوئی نتیجہ نہیں ملا۔',srch_err:'تلاش نہیں ہو سکی۔ انٹرنیٹ چیک کریں۔',tzn:'نماز کے اوقات اس ڈیوائس کے ٹائم زون کے مطابق ہیں اور آپ کی مسجد سے چند منٹ مختلف ہو سکتے ہیں۔',w_title:'خوش آمدید',w1:'1. قرآن چلانے کے لیے شروع کریں دبائیں۔ اذان اور ممنوع اوقات میں یہ رک جاتا ہے۔',w2:'2. نماز کے درست اوقات کے لیے اپنا مقام مقرر کریں۔',w3:'3. قاری اور سورۃ چنیں۔ جو آیت پڑھی جا رہی ہو وہ ترجمے کے ساتھ نمایاں ہوتی ہے۔',w4:'4. مفت ہے، اکاؤنٹ نہیں چاہیے۔ آپ کی ترتیبات آپ کی ڈیوائس پر رہتی ہیں۔',b_ok:'ٹھیک ہے',share_txt:'اذان کے وقفوں، اردو ترجمے اور نمایاں آیات کے ساتھ مفت قرآن پلیئر:',copied:'لنک کاپی ہو گیا۔ شیئر کرنے کے لیے پیسٹ کریں۔',m_i:'ISNA (شمالی امریکہ)',m_e:'مصری',m_u:'ام القریٰ (مکہ)',h_about:'تعارف',about:'مفت اور بغیر اکاؤنٹ۔ ترتیبات صرف اس ڈیوائس پر محفوظ ہوتی ہیں۔ تلاوت کی آڈیو: mp3quran.net اور quran.com۔ آیات، ترجمہ اور تفسیر: alquran.cloud۔ شہر کی تلاش: Open-Meteo۔ وسیع استعمال سے پہلے ہر سروس کی شرائط دیکھ لیں۔',start:'شروع کریں',stop:'بند کریں',prev:'پچھلی',next:'اگلی سورۃ',s_stopped:'رکا ہوا ہے',s_playing:'تلاوت جاری ہے',s_paused:'وقفہ:',s_outside:'مقررہ اوقات سے باہر',s_resumes:'دوبارہ شروع ہوگا',s_next:'اگلا وقفہ',s_until:'چلے گا تا',s_press:'شروع کریں کا بٹن دبائیں۔',s_err:'رابطے میں مسئلہ، دوبارہ کوشش ہو رہی ہے…',s_txterr:'آیات لوڈ نہیں ہو سکیں۔ انٹرنیٹ چیک کریں۔',loading:'آیات لوڈ ہو رہی ہیں…',tap:'تلاوت شروع کرنے کے لیے OK دبائیں یا اسکرین کو ٹچ کریں۔',l_vol:'آواز',l_sleep:'سلیپ ٹائمر (منٹ)',o_off:'بند',o_on:'چالو',l_reciter:'قاری',g_q:'درست آیت ہم آہنگی',g_m:'اندازاً آیت ہم آہنگی',l_style:'تلاوت کا انداز',l_surah:'سورۃ',l_fav:'پسندیدہ',l_after:'سورۃ ختم ہونے کے بعد',o_cont:'اگلی سورۃ جاری رکھیں',o_rep:'یہی سورۃ دہرائیں',l_play:'چلنے کا وقت',o_all:'پورا دن (24 گھنٹے)',o_set:'صرف مقررہ گھنٹے',l_sh:'شروع کا گھنٹہ',l_sm:'شروع کا منٹ',l_hr:'کتنے گھنٹے چلائیں',l_vs:'آیات',o_show:'دکھائیں',o_hide:'چھپائیں',l_ed:'ترجمہ',o_none:'کوئی نہیں',l_tf:'تفسیر',l_fs:'متن کا سائز',o_norm:'عام',o_large:'بڑا',o_xl:'بہت بڑا',l_as:'تلاوت والی آیت کے ساتھ چلیں',b_hb:'ہائی لائٹ پہلے',b_hf:'ہائی لائٹ بعد میں',sy_exact:'اس قاری کے ساتھ آیت کی درست ہم آہنگی۔',sy_est:'آیت کی اندازاً ہم آہنگی۔ بٹنوں سے درست کریں۔',h_dl:'ڈاؤن لوڈ اور آف لائن',b_pdf:'پی ڈی ایف',b_aud:'آڈیو (MP3)',b_vid:'ویڈیو (ریکارڈ)',b_vidx:'ویڈیو بند کریں',b_off:'یہ سورۃ آف لائن محفوظ کریں',b_offx:'آف لائن فائلیں مٹائیں',l_saved:'آف لائن محفوظ',h_sched:'آج کا شیڈول',th_p:'نماز',th_t:'وقت',th_q:'قرآن رکے گا',p_Fajr:'فجر',p_Sunrise:'طلوع آفتاب',p_Dhuhr:'ظہر',p_Asr:'عصر',p_Maghrib:'مغرب',p_Isha:'عشاء',azan:'اذان',jumuah:'جمعہ',w_sr:'طلوع آفتاب (ممنوع وقت)',w_zw:'زوال (ممنوع وقت)',w_ss:'غروب (ممنوع وقت)',lg_a:'اذان کا وقفہ',lg_p:'ممنوع وقت',nextprayer:'اگلی نماز',in:'میں',not_paused:'وقفہ نہیں',h_plan:'روزانہ منصوبہ',l_day:'دن',o_every:'ہر روز',o_fri:'صرف جمعہ',b_add:'منصوبے میں شامل کریں',b_kahf:'جمعہ: سورۃ الکہف شامل کریں',pl_none:'ابھی کوئی منصوبہ نہیں۔',h_set:'ترتیبات',l_city:'شہر',l_meth:'حساب کا طریقہ',m_k:'کراچی (حنفی عصر)',m_m:'مسلم ورلڈ لیگ',l_az:'اذان کے بعد وقفہ (منٹ)',l_jm:'جمعہ کی نماز کا وقفہ (منٹ)',l_sr:'طلوع کے بعد (منٹ)',l_zw:'ظہر سے پہلے (منٹ)',l_ss:'مغرب سے پہلے (منٹ)',l_pr:'طلوع، زوال اور غروب پر وقفہ',o_yes:'ہاں',o_no:'نہیں',l_hj:'ہجری تاریخ میں فرق (دن)',l_auto:'کھولتے ہی خود شروع ہو',l_azs:'اذان کی آواز چلائیں',l_azf:'اذان کی فائل',l_fjf:'فجر کی اذان کی فائل (اختیاری)',l_azu:'یا اذان کا لنک',b_test:'اذان آزمائیں',l_adj:'اپنی مسجد کے مطابق ہر نماز کے منٹ ایڈجسٹ کریں:',note_tv:'ٹی وی کا ٹائم زون درست رکھیں اور اسکرین سیور بند کریں۔ اذان کی آوازیں شامل نہیں؛ اپنی فائل یا لنک شامل کریں۔',saved:'محفوظ ہو گیا۔',nofile:'اذان کی فائل یا لنک مقرر نہیں۔'}};
+var T={en:{sec_listen:'Listen',sec_when:'When to play',sec_verses:'Verses and translation',sec_pray:'Prayer times and location',sec_azan:'Azan and pauses',sec_more:'More',b_opt:'Options',b_close:'Close',tagline:'Recitation that pauses for azan',privacy:'Privacy policy',b_sfav:'Save favorites offline',b_sall:'Save whole Quran offline',b_stx:'Save all verses text offline',l_store:'Storage (MB)',off_prog:'Saving',off_done:'Saved',off_stop:'press the button again to stop',off_warn:'The whole Quran can need several GB of space and a long time. Continue?',off_nofav:'No favorites yet. Tap the star on a surah first.',sy_ref:'Improved estimate based on a reference reciter. Use the buttons to adjust.',share:'Share',wa:'WhatsApp',inst:'Install app',ios:'On iPhone: tap Share, then Add to Home Screen.',h_loc:'Your location',b_gl:'Use my location',b_search:'Search',ph_city:'Search any city in the world',l_pk:'Pakistan quick pick',o_pick:'Choose a city…',l_cur:'Current location',myloc:'My location',loc_set:'Location saved. The calculation method was set automatically; change it in Settings if your mosque uses another.',loc_err:'Could not get your location. Allow location access, or search for your city.',no_res:'No results.',srch_err:'Could not search. Check internet.',tzn:'Prayer times use this device’s time zone and can differ by a few minutes from your mosque.',w_title:'Welcome',w1:'1. Press Start to play the Quran. It pauses for azan and prohibited prayer times.',w2:'2. Set your location so prayer times are correct.',w3:'3. Choose a reciter and surah. The verse being recited is highlighted, with translation.',w4:'4. Free, no account. Your settings stay on your device.',b_ok:'Got it',share_txt:'Free Quran player with azan pauses, Urdu translation and highlighted verses:',copied:'Link copied. Paste it to share.',m_i:'ISNA (North America)',m_e:'Egyptian',m_u:'Umm al-Qura (Makkah)',h_about:'About',about:'Free to use, with no account. Settings are saved only on this device. Recitation audio: mp3quran.net and quran.com. Verses, translations and tafseer: alquran.cloud. City search: Open-Meteo. Please check each service’s terms before wider use.',start:'Start',stop:'Stop',prev:'Previous',next:'Next surah',s_stopped:'Stopped',s_playing:'Playing',s_paused:'Paused for',s_outside:'Outside your play hours',s_resumes:'Resumes at',s_next:'Next pause',s_until:'Plays until',s_press:'Press OK on Start.',s_err:'Connection problem. Retrying…',s_txterr:'Could not load the verses. Check internet.',loading:'Loading verses…',tap:'Press OK or tap anywhere to start playing.',l_vol:'Volume',l_sleep:'Sleep timer (minutes)',o_off:'Off',o_on:'On',l_reciter:'Reciter (qari)',g_q:'Exact verse sync',g_m:'Estimated verse sync',l_style:'Recitation style',l_surah:'Surah',l_fav:'Favorites',l_after:'After the surah ends',o_cont:'Continue to next surah',o_rep:'Repeat this surah',l_play:'Play time',o_all:'All day (24 hours)',o_set:'Only for set hours',l_sh:'Start hour',l_sm:'Start minute',l_hr:'Play for (hours)',l_vs:'Verses',o_show:'Show',o_hide:'Hide',l_ed:'Translation',o_none:'None',l_tf:'Tafseer',l_fs:'Text size',o_norm:'Normal',o_large:'Large',o_xl:'Extra large',l_as:'Follow the verse being recited',b_hb:'Highlight earlier',b_hf:'Highlight later',sy_exact:'Exact verse sync with this reciter.',sy_est:'Estimated verse sync. Use the buttons to adjust.',h_dl:'Download and offline',b_pdf:'PDF',b_aud:'Audio (MP3)',b_vid:'Video (record)',b_vidx:'Stop video',b_off:'Save this surah offline',b_offx:'Delete offline files',l_saved:'Saved offline',h_sched:'Today’s schedule',th_p:'Prayer',th_t:'Time',th_q:'Quran pauses',p_Fajr:'Fajr',p_Sunrise:'Sunrise',p_Dhuhr:'Dhuhr',p_Asr:'Asr',p_Maghrib:'Maghrib',p_Isha:'Isha',azan:'azan',jumuah:'Jumu’ah',w_sr:'Sunrise (prohibited time)',w_zw:'Noon (prohibited time)',w_ss:'Sunset (prohibited time)',lg_a:'Azan pause',lg_p:'Prohibited time',nextprayer:'Next prayer',in:'in',not_paused:'Not paused',h_plan:'Daily plan',l_day:'Day',o_every:'Every day',o_fri:'Friday only',b_add:'Add to plan',b_kahf:'Add Friday: Surah Al-Kahf',pl_none:'No plan items yet.',h_set:'Settings',l_city:'City',l_meth:'Calculation method',m_k:'Karachi (Hanafi Asr)',m_m:'Muslim World League',l_az:'Pause after azan (min)',l_jm:'Friday Jumu’ah pause (min)',l_sr:'After sunrise (min)',l_zw:'Before Dhuhr (min)',l_ss:'Before Maghrib (min)',l_pr:'Pause at sunrise, noon, sunset',o_yes:'Yes',o_no:'No',l_hj:'Hijri date adjust (days)',l_auto:'Start automatically when opened',l_azs:'Play azan sound',l_azf:'Azan sound file',l_fjf:'Fajr azan file (optional)',l_azu:'Or azan link',b_test:'Test azan',l_adj:'Adjust minutes per prayer to match your mosque:',note_tv:'Set the TV time zone correctly and turn off the screensaver. Azan sounds are not included; add your own file or link.',saved:'Saved.',nofile:'No azan file or link set.'},
+ur:{sec_listen:'سنیں',sec_when:'چلنے کا وقت',sec_verses:'آیات اور ترجمہ',sec_pray:'نماز کے اوقات اور مقام',sec_azan:'اذان اور وقفے',sec_more:'مزید',b_opt:'اختیارات',b_close:'بند کریں',tagline:'اذان کے وقفوں کے ساتھ تلاوت',privacy:'پرائیویسی پالیسی',b_sfav:'پسندیدہ سورتیں آف لائن محفوظ کریں',b_sall:'پورا قرآن آف لائن محفوظ کریں',b_stx:'تمام آیات کا متن آف لائن محفوظ کریں',l_store:'اسٹوریج (MB)',off_prog:'محفوظ ہو رہا ہے',off_done:'محفوظ ہوا',off_stop:'روکنے کے لیے دوبارہ بٹن دبائیں',off_warn:'پورے قرآن کے لیے کئی GB جگہ اور کافی وقت درکار ہو سکتا ہے۔ جاری رکھیں؟',off_nofav:'ابھی کوئی پسندیدہ سورۃ نہیں۔ پہلے سورۃ پر ستارہ دبائیں۔',sy_ref:'ایک حوالہ قاری کی بنیاد پر بہتر اندازہ۔ بٹنوں سے درست کریں۔',share:'شیئر کریں',wa:'واٹس ایپ',inst:'ایپ انسٹال کریں',ios:'آئی فون پر: شیئر دبائیں، پھر Add to Home Screen۔',h_loc:'آپ کا مقام',b_gl:'میرا مقام استعمال کریں',b_search:'تلاش',ph_city:'دنیا کا کوئی بھی شہر تلاش کریں',l_pk:'پاکستان کے شہر',o_pick:'شہر منتخب کریں…',l_cur:'موجودہ مقام',myloc:'میرا مقام',loc_set:'مقام محفوظ ہو گیا۔ حساب کا طریقہ خود بخود چنا گیا؛ اگر آپ کی مسجد کا طریقہ مختلف ہو تو ترتیبات میں بدل لیں۔',loc_err:'آپ کا مقام معلوم نہیں ہو سکا۔ مقام کی اجازت دیں یا اپنا شہر تلاش کریں۔',no_res:'کوئی نتیجہ نہیں ملا۔',srch_err:'تلاش نہیں ہو سکی۔ انٹرنیٹ چیک کریں۔',tzn:'نماز کے اوقات اس ڈیوائس کے ٹائم زون کے مطابق ہیں اور آپ کی مسجد سے چند منٹ مختلف ہو سکتے ہیں۔',w_title:'خوش آمدید',w1:'1. قرآن چلانے کے لیے شروع کریں دبائیں۔ اذان اور ممنوع اوقات میں یہ رک جاتا ہے۔',w2:'2. نماز کے درست اوقات کے لیے اپنا مقام مقرر کریں۔',w3:'3. قاری اور سورۃ چنیں۔ جو آیت پڑھی جا رہی ہو وہ ترجمے کے ساتھ نمایاں ہوتی ہے۔',w4:'4. مفت ہے، اکاؤنٹ نہیں چاہیے۔ آپ کی ترتیبات آپ کی ڈیوائس پر رہتی ہیں۔',b_ok:'ٹھیک ہے',share_txt:'اذان کے وقفوں، اردو ترجمے اور نمایاں آیات کے ساتھ مفت قرآن پلیئر:',copied:'لنک کاپی ہو گیا۔ شیئر کرنے کے لیے پیسٹ کریں۔',m_i:'ISNA (شمالی امریکہ)',m_e:'مصری',m_u:'ام القریٰ (مکہ)',h_about:'تعارف',about:'مفت اور بغیر اکاؤنٹ۔ ترتیبات صرف اس ڈیوائس پر محفوظ ہوتی ہیں۔ تلاوت کی آڈیو: mp3quran.net اور quran.com۔ آیات، ترجمہ اور تفسیر: alquran.cloud۔ شہر کی تلاش: Open-Meteo۔ وسیع استعمال سے پہلے ہر سروس کی شرائط دیکھ لیں۔',start:'شروع کریں',stop:'بند کریں',prev:'پچھلی',next:'اگلی سورۃ',s_stopped:'رکا ہوا ہے',s_playing:'تلاوت جاری ہے',s_paused:'وقفہ:',s_outside:'مقررہ اوقات سے باہر',s_resumes:'دوبارہ شروع ہوگا',s_next:'اگلا وقفہ',s_until:'چلے گا تا',s_press:'شروع کریں کا بٹن دبائیں۔',s_err:'رابطے میں مسئلہ، دوبارہ کوشش ہو رہی ہے…',s_txterr:'آیات لوڈ نہیں ہو سکیں۔ انٹرنیٹ چیک کریں۔',loading:'آیات لوڈ ہو رہی ہیں…',tap:'تلاوت شروع کرنے کے لیے OK دبائیں یا اسکرین کو ٹچ کریں۔',l_vol:'آواز',l_sleep:'سلیپ ٹائمر (منٹ)',o_off:'بند',o_on:'چالو',l_reciter:'قاری',g_q:'درست آیت ہم آہنگی',g_m:'اندازاً آیت ہم آہنگی',l_style:'تلاوت کا انداز',l_surah:'سورۃ',l_fav:'پسندیدہ',l_after:'سورۃ ختم ہونے کے بعد',o_cont:'اگلی سورۃ جاری رکھیں',o_rep:'یہی سورۃ دہرائیں',l_play:'چلنے کا وقت',o_all:'پورا دن (24 گھنٹے)',o_set:'صرف مقررہ گھنٹے',l_sh:'شروع کا گھنٹہ',l_sm:'شروع کا منٹ',l_hr:'کتنے گھنٹے چلائیں',l_vs:'آیات',o_show:'دکھائیں',o_hide:'چھپائیں',l_ed:'ترجمہ',o_none:'کوئی نہیں',l_tf:'تفسیر',l_fs:'متن کا سائز',o_norm:'عام',o_large:'بڑا',o_xl:'بہت بڑا',l_as:'تلاوت والی آیت کے ساتھ چلیں',b_hb:'ہائی لائٹ پہلے',b_hf:'ہائی لائٹ بعد میں',sy_exact:'اس قاری کے ساتھ آیت کی درست ہم آہنگی۔',sy_est:'آیت کی اندازاً ہم آہنگی۔ بٹنوں سے درست کریں۔',h_dl:'ڈاؤن لوڈ اور آف لائن',b_pdf:'پی ڈی ایف',b_aud:'آڈیو (MP3)',b_vid:'ویڈیو (ریکارڈ)',b_vidx:'ویڈیو بند کریں',b_off:'یہ سورۃ آف لائن محفوظ کریں',b_offx:'آف لائن فائلیں مٹائیں',l_saved:'آف لائن محفوظ',h_sched:'آج کا شیڈول',th_p:'نماز',th_t:'وقت',th_q:'قرآن رکے گا',p_Fajr:'فجر',p_Sunrise:'طلوع آفتاب',p_Dhuhr:'ظہر',p_Asr:'عصر',p_Maghrib:'مغرب',p_Isha:'عشاء',azan:'اذان',jumuah:'جمعہ',w_sr:'طلوع آفتاب (ممنوع وقت)',w_zw:'زوال (ممنوع وقت)',w_ss:'غروب (ممنوع وقت)',lg_a:'اذان کا وقفہ',lg_p:'ممنوع وقت',nextprayer:'اگلی نماز',in:'میں',not_paused:'وقفہ نہیں',h_plan:'روزانہ منصوبہ',l_day:'دن',o_every:'ہر روز',o_fri:'صرف جمعہ',b_add:'منصوبے میں شامل کریں',b_kahf:'جمعہ: سورۃ الکہف شامل کریں',pl_none:'ابھی کوئی منصوبہ نہیں۔',h_set:'ترتیبات',l_city:'شہر',l_meth:'حساب کا طریقہ',m_k:'کراچی (حنفی عصر)',m_m:'مسلم ورلڈ لیگ',l_az:'اذان کے بعد وقفہ (منٹ)',l_jm:'جمعہ کی نماز کا وقفہ (منٹ)',l_sr:'طلوع کے بعد (منٹ)',l_zw:'ظہر سے پہلے (منٹ)',l_ss:'مغرب سے پہلے (منٹ)',l_pr:'طلوع، زوال اور غروب پر وقفہ',o_yes:'ہاں',o_no:'نہیں',l_hj:'ہجری تاریخ میں فرق (دن)',l_auto:'کھولتے ہی خود شروع ہو',l_azs:'اذان کی آواز چلائیں',l_azf:'اذان کی فائل',l_fjf:'فجر کی اذان کی فائل (اختیاری)',l_azu:'یا اذان کا لنک',b_test:'اذان آزمائیں',l_adj:'اپنی مسجد کے مطابق ہر نماز کے منٹ ایڈجسٹ کریں:',note_tv:'ٹی وی کا ٹائم زون درست رکھیں اور اسکرین سیور بند کریں۔ اذان کی آوازیں شامل نہیں؛ اپنی فائل یا لنک شامل کریں۔',saved:'محفوظ ہو گیا۔',nofile:'اذان کی فائل یا لنک مقرر نہیں۔'}};
 function t(k){return (T[S.lang]&&T[S.lang][k])||T.en[k]||k}
 /* ---------- state ---------- */
 var running=false,rec=null,ldg=false,lt=0,track=ALL.slice(),names={},namesAr={},rcs=[],rc={},tc={},ays=[],cum=[],curI=-1,ex=false,sf=[],curInfo=null,needT=false,errN=0,sleepEnd=0,azKey='',pdone={},lastBlob=null,wk=null;
@@ -661,6 +717,8 @@ $('shb').onclick=function(){
   else $('im').textContent=SU;
 };
 $('wab').onclick=function(){window.open('https://wa.me/?text='+encodeURIComponent(t('share_txt')+' '+SU),'_blank')};
+$('opt').onclick=function(){$('side').classList.add('open')};
+$('cl').onclick=function(){$('side').classList.remove('open')};
 /* ---------- boot ---------- */
 try{var sv=JSON.parse(localStorage.getItem('qrl')||'null');if(sv&&sv.length)rcs=sv}catch(e){}
 if(!rcs.length)rcs=[{k:'m:1',type:'m',id:1,name:'Ibrahim Al-Akdar',moshaf:[{id:1,name:'Hafs - Murattal',server:'https://server6.mp3quran.net/akdr/'}]},{k:'m:2',type:'m',id:2,name:'Maher Al-Muaiqly',moshaf:[{id:2,name:'Hafs - Murattal',server:'https://server12.mp3quran.net/maher/'}]}];
