@@ -1,0 +1,76 @@
+STORE LISTING TEXTS AND FORM ANSWERS (draft: check each against Play Console's current wording)
+
+APP NAME (max 30): Quran Player: Azan Pause
+SHORT DESCRIPTION (max 80): Quran recitation that pauses for azan. Urdu translation, highlighted verses.
+
+FULL DESCRIPTION (English):
+Listen to the Quran all day with a player that respects prayer times.
+
+* Pauses automatically for each azan and for the prohibited prayer times, then resumes where it stopped.
+* Verse-by-verse highlighting while the recitation plays, with Urdu or English translation and optional Arabic tafseer.
+* Famous reciters, including Mishary Alafasy, Sudais, Shuraim, Abdul Basit, Husary, Minshawi and more.
+* Choose any surah, repeat it, or continue to the next. Set the hours you want it to play.
+* Prayer times for your location: use GPS or search any city. Multiple calculation methods and a Friday Jumu'ah pause.
+* Add your own azan sound. The Quran pauses, your azan plays, and the Quran resumes.
+* Daily plan: for example play Surah Al-Kahf every Friday morning.
+* Sleep timer, favorites, volume control, Hijri date and a countdown to the next prayer.
+* Save surahs for offline listening.
+* Works on phones and Android TV. Urdu and English screens.
+Free. No ads. No account.
+
+Prayer times are calculated and may differ by a few minutes from your local mosque. You can adjust each prayer.
+
+FULL DESCRIPTION (Urdu):
+اذان کے وقفوں کے ساتھ پورا دن قرآن کی تلاوت۔
+* ہر اذان اور ممنوع اوقات میں خود بخود رک جاتا ہے اور پھر وہیں سے دوبارہ شروع ہوتا ہے۔
+* تلاوت کے ساتھ آیت بہ آیت نمایاں ہونا، اردو یا انگریزی ترجمہ اور عربی تفسیر۔
+* مشہور قاری: مشاری العفاسی، السدیس، الشریم، عبدالباسط، الحصری، المنشاوی اور دیگر۔
+* کوئی بھی سورۃ چنیں، دہرائیں یا اگلی پر جائیں۔ چلنے کے گھنٹے مقرر کریں۔
+* اپنے مقام کے مطابق نماز کے اوقات، جمعہ کے لیے الگ وقفہ۔
+* اپنی اذان کی آواز شامل کریں۔
+* سلیپ ٹائمر، پسندیدہ سورتیں، ہجری تاریخ، آف لائن سننے کی سہولت۔
+* موبائل اور اینڈرائیڈ ٹی وی پر چلتا ہے۔ مفت، بغیر اشتہار، بغیر اکاؤنٹ۔
+
+CATEGORY: Books & Reference (or Lifestyle)
+TAGS / KEYWORDS: Quran, azan, prayer times, Urdu translation, tilawat
+CONTACT EMAIL: (your email)
+PRIVACY POLICY URL: https://majeed-creator.github.io/QURAN-RECITATION-/privacy.html
+
+APP ACCESS: All functionality is available without login.
+ADS: No.
+CONTENT RATING (IARC questionnaire): Choose the reference/educational style category. Answer No to violence, sexual
+content, bad language, drugs, gambling and user-to-user interaction. Religious content is not a restricted topic by itself.
+TARGET AUDIENCE: Decide yourself. Choosing an age group that includes under-13 triggers Google's Families policy,
+with extra rules. Choosing 13+ avoids that.
+
+DATA SAFETY (draft answers, verify against Google's definitions):
+- Does the app collect or share required data types? Think about what is sent off the device:
+  * Location: used on the device to calculate prayer times; not sent to the developer.
+  * City search text: sent to Open-Meteo to find a place (not linked to identity, no ads).
+  * IP address: seen by the audio, text and search services the app contacts.
+  Google decides what counts as "collected", so read its guidance and disclose conservatively.
+- Data is encrypted in transit: Yes (HTTPS). No account, so no account deletion needed.
+- No data sold. No advertising or analytics SDKs.
+
+LOCATION PERMISSION DECLARATION:
+"Location is optional. It is requested only when the user taps 'Use my location' to calculate local prayer times.
+It is processed on the device and not stored on a server."
+
+FOREGROUND SERVICE (media playback) DECLARATION:
+"The app plays Quran recitation audio continuously, for hours, as the user's main purpose. A media-playback
+foreground service keeps playback running when the screen turns off. The user starts it by opening the app and sees an
+ongoing notification while it runs. It stops when the app is closed."
+Video to submit: a short screen recording that shows playback starting, the notification, and the screen being turned off.
+
+TV NOTES:
+- The app has a TV launcher icon and banner. Google tests TV apps with a remote: check every button can be reached
+  with the arrow keys and OK on a real TV or the Android TV emulator before applying for the TV form factor.
+
+
+--- ADDED 23 NOV 2026: LEARNING FEATURES ---
+New description lines (English): "Learn area for parents and teachers: kids verse practice (listen, then repeat) and Noorani Qaida lessons. Play any verse by tapping it or typing 2:255."
+New description lines (Urdu): "والدین اور اساتذہ کے لیے سیکھنے کا حصہ: بچوں کے لیے آیات کی مشق اور نورانی قاعدہ۔ کوئی بھی آیت ٹیپ کر کے یا 2:255 لکھ کر چلائیں۔"
+IMPORTANT - TARGET AUDIENCE: The consent screen ("I am an adult and a Muslim parent, guardian or teacher") is good practice,
+but it does NOT by itself exempt the app from Google's Families Policy. If your target audience or the app's appeal
+includes children under 13, Google applies extra rules. Keep the audience at 13+ (or 18+), word the store text as
+"for parents and teachers", and read Google's Families policy before you submit. This is my reading, not legal advice.

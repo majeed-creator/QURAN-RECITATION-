@@ -1,0 +1,60 @@
+QURAN PLAYER - HOW TO PUBLISH ON GOOGLE PLAY (step by step)
+
+Be ready for about 3 to 4 weeks. Most of it is waiting for Google's rules.
+Last checked against Google's pages on 20 Nov 2026. Rules change, so read what Play Console shows you.
+
+PART A - BUILD THE FILE GOOGLE WANTS
+1. Update your website first (quran-website-files.zip): upload index.html, privacy.html, sw.js
+   to your GitHub website repository. Open privacy.html and replace YOUR-EMAIL@example.com with your real email.
+   Your policy link will be: https://majeed-creator.github.io/QURAN-RECITATION-/privacy.html
+2. On github.com make a NEW repository named quran-android and choose PRIVATE.
+   (Private is important: your signing key will be stored in it.)
+3. Upload the folder "app" and the files build.gradle, settings.gradle, gradle.properties
+   (from quran-android-playstore.zip).
+4. Add file > Create new file. Name: .github/workflows/build-release.yml
+   Paste the text of build-release.yml from the zip. Commit.
+5. Actions tab > "Build Play Store bundle and test APK" > Run workflow.
+   Type a password (6+ characters) and WRITE IT DOWN. Use the same password every time.
+6. After 5 to 15 minutes open the run and download 3 files under Artifacts:
+   - play-store-bundle-aab  (this is what you upload to Google Play)
+   - test-apk               (install this on your phone or TV to test first)
+   - upload-key-backup      (save this somewhere safe, with your password)
+7. If the run fails, open it, copy the red error text and send it to Claude.
+
+PART B - GOOGLE PLAY ACCOUNT
+1. Go to play.google.com/console. Sign in with a Google account. Choose Personal account.
+   Pay the one-time registration fee (US$25 when I checked). Complete identity verification.
+   Check at sign-up that your country and payment card are accepted.
+2. A personal account made after 13 Nov 2023 must run a closed test with 12 testers for 14 days in a row
+   before production. Organization accounts skip this but need company details.
+
+PART C - CREATE THE APP IN PLAY CONSOLE
+1. Create app: name "Quran Player", language English, App, Free.
+2. Dashboard tasks - use the answers in STORE_LISTING.txt for:
+   - Privacy policy URL, App access (all features available without login), Ads (No),
+     Content rating questionnaire, Target audience, Data safety, Foreground service declaration,
+     Location permission declaration.
+3. Main store listing: paste texts from STORE_LISTING.txt. Upload graphics from the graphics folder:
+   app icon 512x512, feature graphic 1024x500. Add at least 2 phone screenshots (take them from the test APK).
+4. To appear on Android TV: Setup > Advanced settings > Form factors > add Android TV.
+   Upload the TV banner 1280x720 and TV screenshots (1920x1080). Google reviews TV apps for remote-control use.
+
+PART D - TEST, THEN RELEASE
+1. Testing > Closed testing > Create track > upload app-release.aab > add testers (12 or more email
+   addresses of Google accounts, or a Google Group) > Start rollout.
+2. Ask each tester to accept the invite, install the app and open it on several days.
+   They must stay opted in for 14 days in a row.
+3. After 14 days press Apply for production, answer the questions, then create a Production release
+   with the same or a newer bundle. Each new upload needs a higher version number. The workflow does this
+   automatically on every run.
+4. Review can take up to about 7 days.
+
+THINGS THAT CAN GET THE APP REJECTED (read before you submit)
+- "Website in an app": Google can reject apps that only show a website. This app bundles its pages and adds
+  native features (location, file picker, background service), which helps but gives no guarantee.
+- Audio and text come from mp3quran.net, quran.com, alquran.cloud and Open-Meteo. Read their terms for use in
+  a store app, or ask them for permission, before you submit. I have not read all of them.
+- The background service shows a permanent notification while the app is open. Google asks you to explain
+  media-playback services. Use the text in STORE_LISTING.txt.
+- Never make the quran-android repository public, and never lose your password and key backup.
+  Google Play keeps your real signing key, so a lost upload key can be reset through Play Console support.
