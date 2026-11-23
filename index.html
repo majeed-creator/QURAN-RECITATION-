@@ -81,6 +81,25 @@ td,th{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line)}th{col
 .card{background:var(--card);border:2px solid var(--gold);border-radius:22px;padding:26px;max-width:640px;max-height:90vh;overflow:auto;box-shadow:inset 0 0 0 5px var(--bg2),inset 0 0 0 6px var(--line)}
 .card p{margin:10px 0}
 #opt,#cl{display:none}
+.card.wide{max-width:940px;width:100%}
+.chk{display:flex;gap:12px;align-items:flex-start;color:var(--ink);font-size:1em;margin:12px 0}
+input[type=checkbox]{width:26px;height:26px;padding:0;accent-color:var(--gold);flex:none}
+.sel{background:var(--gold)!important;color:#1a1305!important}
+.kbox{text-align:center;border:2px solid var(--gold);border-radius:18px;padding:18px;margin-top:14px;background:rgba(8,39,34,.9)}
+#kst{font-weight:700;color:var(--gold);min-height:1.5em}
+#kar{font:400 clamp(2.4rem,7vw,4.4rem)/1.9 Amiri,serif;direction:rtl}
+#kur{font-size:1.4rem;direction:rtl}
+.kbarw{height:12px;background:#082722;border-radius:8px;overflow:hidden;margin-top:12px}.kbarw i{display:block;height:100%;width:0;background:var(--gold)}
+.qlay{display:grid;grid-template-columns:240px 1fr;gap:16px;margin-top:12px}
+#ql{display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto}
+#ql button{text-align:left;font-size:.9em}
+.qg{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:10px}
+.qt{border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center;cursor:pointer;background:rgba(8,39,34,.7)}
+.qa{font:400 2.2rem/1.9 Amiri,serif;direction:rtl;text-align:center;white-space:pre-wrap}
+.qs{font-size:.75em;color:var(--mute)}
+.qbig{font:400 5.5rem/1.6 Amiri,serif;text-align:center;direction:rtl;color:var(--gold);white-space:pre-wrap}
+.qrule{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:10px 0}
+.qh{font-weight:700;color:var(--gold)}
 #prt{display:none;direction:ltr}
 @page{margin:16mm}
 @media (max-width:960px){
@@ -91,6 +110,7 @@ td,th{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line)}th{col
   h1{font-size:2.6rem}
   .niche{border-radius:50% 50% 20px 20px/90px 90px 20px 20px;padding-top:36px}
 }
+@media (max-width:700px){.qlay{grid-template-columns:1fr}#ql{flex-direction:row;overflow-x:auto;max-height:none}}
 @media (max-width:600px){body{font-size:17px}.sn1{font-size:2.2rem}}
 @media print{body{background:#fff}body>*:not(#prt){display:none!important}#prt{display:block!important}#prt *{color:#000!important;background:none!important}#prt .ay{border:0;border-bottom:1px solid #ccc;break-inside:avoid}#prt h2{text-align:center;font:700 2rem Amiri,serif}}
 </style>
@@ -143,6 +163,7 @@ td,th{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line)}th{col
       <button id="pv" data-t="prev"></button>
       <button id="nx" data-t="next"></button>
       <button id="fv" aria-label="Favorite">☆</button>
+      <button id="lrn" data-t="b_learn"></button>
     </div>
   </section>
   <section class="mushaf"><div id="tx" class="hide" tabindex="0"></div></section>
@@ -157,6 +178,11 @@ td,th{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line)}th{col
     <label for="su" data-t="l_surah"></label><select id="su"></select>
     <label for="fvs" data-t="l_fav"></label><select id="fvs"></select>
     <label for="md" data-t="l_after"></label><select id="md"><option value="next" data-t="o_cont"></option><option value="repeat" data-t="o_rep"></option></select>
+    <h3 data-t="v_title"></h3>
+    <div class="row" style="margin-top:0"><select id="vv" style="flex:1" aria-label="Verse"></select><button class="sm" id="vp" data-t="b_pv"></button></div>
+    <div class="row"><input id="jv" data-ph="ph_jump" style="flex:1;min-width:140px"><button class="sm" id="jg" data-t="b_go"></button></div>
+    <label for="vm" data-t="l_vm"></label><select id="vm"><option value="surah" data-t="vm_surah"></option><option value="one" data-t="vm_one"></option><option value="rep" data-t="vm_rep"></option></select>
+    <div id="vnw" class="hide"><label for="vn" data-t="l_vn"></label><select id="vn"><option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="10">10</option></select></div>
     <label for="vo" data-t="l_vol"></label><input id="vo" type="range" min="0" max="100">
     <label for="sl" data-t="l_sleep"></label><select id="sl"><option value="0" data-t="o_off"></option><option value="15">15</option><option value="30">30</option><option value="60">60</option><option value="90">90</option><option value="120">120</option></select>
   </div></details>
@@ -249,6 +275,30 @@ td,th{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line)}th{col
   <p data-t="w1"></p><p data-t="w2"></p><p data-t="w3"></p><p data-t="w4"></p>
   <div class="row"><button id="wgl" data-t="b_gl"></button><button class="main" id="wok" data-t="b_ok"></button></div>
 </div></div>
+<div id="kc" class="ov hide" role="dialog" aria-modal="true"><div class="card">
+  <h2 data-t="c_title" style="font-size:1.6rem"></h2>
+  <label class="chk"><input type="checkbox" id="kc1"><span data-t="c_a"></span></label>
+  <label class="chk"><input type="checkbox" id="kc2"><span data-t="c_b"></span></label>
+  <label class="chk"><input type="checkbox" id="kc3"><span data-t="c_c"></span></label>
+  <p class="note"><a href="privacy.html" target="_blank" data-t="privacy"></a></p>
+  <div class="row"><button class="main" id="kok" data-t="c_ok" disabled></button><button id="kno" data-t="b_close"></button></div>
+</div></div>
+<div id="lh" class="ov hide" role="dialog" aria-modal="true"><div class="card wide">
+  <div class="sidehead"><h2 data-t="b_learn"></h2><button class="sm" id="lhx" data-t="b_close" style="display:inline-block"></button></div>
+  <div class="row"><button class="sm sel" id="tk" data-t="t_kids"></button><button class="sm" id="tq" data-t="t_qaida"></button></div>
+  <div id="pk">
+    <p class="note" data-t="k_help"></p>
+    <div class="row" id="kq"></div>
+    <div class="g">
+      <div><label for="kns" data-t="l_surah"></label><select id="kns"></select></div>
+      <div><label for="kr" data-t="k_rep"></label><select id="kr"><option value="1">1</option><option value="3">3</option><option value="5">5</option><option value="10">10</option></select></div>
+      <div><label for="ks" data-t="k_spd"></label><select id="ks"><option value="1" data-t="o_norm"></option><option value="0.75">0.75x</option><option value="0.5">0.5x</option></select></div>
+    </div>
+    <div class="kbox"><p id="kst"></p><div id="kar"></div><div id="kur"></div><div class="kbarw"><i id="kb"></i></div></div>
+    <div class="row" style="justify-content:center"><button id="kpv" data-t="k_prev"></button><button class="main" id="kg" data-t="start"></button><button id="knx" data-t="k_next"></button><span class="note" id="kstars"></span></div>
+  </div>
+  <div id="pq" class="hide"><div class="qlay"><div id="ql"></div><div id="qc"></div></div></div>
+</div></div>
 <div id="prt"></div>
 <audio id="au"></audio>
 <script>
@@ -258,13 +308,15 @@ var P=['Fajr','Dhuhr','Asr','Maghrib','Isha'];
 var CITIES={'Kasur':[31.115,74.447],'Lahore':[31.549,74.344],'Karachi':[24.861,67.01],'Islamabad':[33.684,73.048],'Rawalpindi':[33.598,73.045],'Faisalabad':[31.418,73.079],'Multan':[30.157,71.525],'Peshawar':[34.015,71.525],'Quetta':[30.18,66.997],'Hyderabad':[25.396,68.377]};
 var POP=['afasy','sudais','shuraim','shuraym','abdulbasit','abdul basit','abdulbaset','husary','hussary','minshawi','maher','muaiqly','ghamdi','shatri','dossari','rifai','ajmi','budair','tablawi'];
 var ALL=[];for(var i=1;i<=114;i++)ALL.push(i);
-var S={city:'',place:'',m:'m',az:10,jm:60,sr:20,zw:10,ss:20,pr:1,hj:0,auto:1,azOn:1,azUrl:'',lang:'en',vol:100,vs:1,ed:'ur.jalandhry',tf:'',fs:1,off:0,as:1,rk:'q:7',mid:0,cur:1,pos:0,md:'next',sc:'all',sh:6,sm:0,sa:'AM',hr:8,run:0,fav:[],plan:[],adj:{Fajr:0,Dhuhr:0,Asr:0,Maghrib:0,Isha:0}};
+var VC=[7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6];
+var S={city:'',place:'',m:'m',az:10,jm:60,sr:20,zw:10,ss:20,pr:1,hj:0,auto:1,azOn:1,azUrl:'',lang:'en',vol:100,vs:1,ed:'ur.jalandhry',tf:'',fs:1,off:0,as:1,vm:'surah',vn:3,kr:3,ks:1,stars:0,qd:[],rk:'q:7',mid:0,cur:1,pos:0,md:'next',sc:'all',sh:6,sm:0,sa:'AM',hr:8,run:0,fav:[],plan:[],adj:{Fajr:0,Dhuhr:0,Asr:0,Maghrib:0,Isha:0}};
 try{Object.assign(S,JSON.parse(localStorage.getItem('qv3')||'{}'))}catch(e){}
 var $=function(i){return document.getElementById(i)},au=$('au');
+var vsess=null,ovr=false,pendingV=null,kTimer=null,gapOn=false,K={n:1};
 function save(){try{localStorage.setItem('qv3',JSON.stringify(S))}catch(e){}}
 /* ---------- language ---------- */
-var T={en:{sec_listen:'Listen',sec_when:'When to play',sec_verses:'Verses and translation',sec_pray:'Prayer times and location',sec_azan:'Azan and pauses',sec_more:'More',b_opt:'Options',b_close:'Close',tagline:'Recitation that pauses for azan',privacy:'Privacy policy',b_sfav:'Save favorites offline',b_sall:'Save whole Quran offline',b_stx:'Save all verses text offline',l_store:'Storage (MB)',off_prog:'Saving',off_done:'Saved',off_stop:'press the button again to stop',off_warn:'The whole Quran can need several GB of space and a long time. Continue?',off_nofav:'No favorites yet. Tap the star on a surah first.',sy_ref:'Improved estimate based on a reference reciter. Use the buttons to adjust.',share:'Share',wa:'WhatsApp',inst:'Install app',ios:'On iPhone: tap Share, then Add to Home Screen.',h_loc:'Your location',b_gl:'Use my location',b_search:'Search',ph_city:'Search any city in the world',l_pk:'Pakistan quick pick',o_pick:'Choose a city…',l_cur:'Current location',myloc:'My location',loc_set:'Location saved. The calculation method was set automatically; change it in Settings if your mosque uses another.',loc_err:'Could not get your location. Allow location access, or search for your city.',no_res:'No results.',srch_err:'Could not search. Check internet.',tzn:'Prayer times use this device’s time zone and can differ by a few minutes from your mosque.',w_title:'Welcome',w1:'1. Press Start to play the Quran. It pauses for azan and prohibited prayer times.',w2:'2. Set your location so prayer times are correct.',w3:'3. Choose a reciter and surah. The verse being recited is highlighted, with translation.',w4:'4. Free, no account. Your settings stay on your device.',b_ok:'Got it',share_txt:'Free Quran player with azan pauses, Urdu translation and highlighted verses:',copied:'Link copied. Paste it to share.',m_i:'ISNA (North America)',m_e:'Egyptian',m_u:'Umm al-Qura (Makkah)',h_about:'About',about:'Free to use, with no account. Settings are saved only on this device. Recitation audio: mp3quran.net and quran.com. Verses, translations and tafseer: alquran.cloud. City search: Open-Meteo. Please check each service’s terms before wider use.',start:'Start',stop:'Stop',prev:'Previous',next:'Next surah',s_stopped:'Stopped',s_playing:'Playing',s_paused:'Paused for',s_outside:'Outside your play hours',s_resumes:'Resumes at',s_next:'Next pause',s_until:'Plays until',s_press:'Press OK on Start.',s_err:'Connection problem. Retrying…',s_txterr:'Could not load the verses. Check internet.',loading:'Loading verses…',tap:'Press OK or tap anywhere to start playing.',l_vol:'Volume',l_sleep:'Sleep timer (minutes)',o_off:'Off',o_on:'On',l_reciter:'Reciter (qari)',g_q:'Exact verse sync',g_m:'Estimated verse sync',l_style:'Recitation style',l_surah:'Surah',l_fav:'Favorites',l_after:'After the surah ends',o_cont:'Continue to next surah',o_rep:'Repeat this surah',l_play:'Play time',o_all:'All day (24 hours)',o_set:'Only for set hours',l_sh:'Start hour',l_sm:'Start minute',l_hr:'Play for (hours)',l_vs:'Verses',o_show:'Show',o_hide:'Hide',l_ed:'Translation',o_none:'None',l_tf:'Tafseer',l_fs:'Text size',o_norm:'Normal',o_large:'Large',o_xl:'Extra large',l_as:'Follow the verse being recited',b_hb:'Highlight earlier',b_hf:'Highlight later',sy_exact:'Exact verse sync with this reciter.',sy_est:'Estimated verse sync. Use the buttons to adjust.',h_dl:'Download and offline',b_pdf:'PDF',b_aud:'Audio (MP3)',b_vid:'Video (record)',b_vidx:'Stop video',b_off:'Save this surah offline',b_offx:'Delete offline files',l_saved:'Saved offline',h_sched:'Today’s schedule',th_p:'Prayer',th_t:'Time',th_q:'Quran pauses',p_Fajr:'Fajr',p_Sunrise:'Sunrise',p_Dhuhr:'Dhuhr',p_Asr:'Asr',p_Maghrib:'Maghrib',p_Isha:'Isha',azan:'azan',jumuah:'Jumu’ah',w_sr:'Sunrise (prohibited time)',w_zw:'Noon (prohibited time)',w_ss:'Sunset (prohibited time)',lg_a:'Azan pause',lg_p:'Prohibited time',nextprayer:'Next prayer',in:'in',not_paused:'Not paused',h_plan:'Daily plan',l_day:'Day',o_every:'Every day',o_fri:'Friday only',b_add:'Add to plan',b_kahf:'Add Friday: Surah Al-Kahf',pl_none:'No plan items yet.',h_set:'Settings',l_city:'City',l_meth:'Calculation method',m_k:'Karachi (Hanafi Asr)',m_m:'Muslim World League',l_az:'Pause after azan (min)',l_jm:'Friday Jumu’ah pause (min)',l_sr:'After sunrise (min)',l_zw:'Before Dhuhr (min)',l_ss:'Before Maghrib (min)',l_pr:'Pause at sunrise, noon, sunset',o_yes:'Yes',o_no:'No',l_hj:'Hijri date adjust (days)',l_auto:'Start automatically when opened',l_azs:'Play azan sound',l_azf:'Azan sound file',l_fjf:'Fajr azan file (optional)',l_azu:'Or azan link',b_test:'Test azan',l_adj:'Adjust minutes per prayer to match your mosque:',note_tv:'Set the TV time zone correctly and turn off the screensaver. Azan sounds are not included; add your own file or link.',saved:'Saved.',nofile:'No azan file or link set.'},
-ur:{sec_listen:'سنیں',sec_when:'چلنے کا وقت',sec_verses:'آیات اور ترجمہ',sec_pray:'نماز کے اوقات اور مقام',sec_azan:'اذان اور وقفے',sec_more:'مزید',b_opt:'اختیارات',b_close:'بند کریں',tagline:'اذان کے وقفوں کے ساتھ تلاوت',privacy:'پرائیویسی پالیسی',b_sfav:'پسندیدہ سورتیں آف لائن محفوظ کریں',b_sall:'پورا قرآن آف لائن محفوظ کریں',b_stx:'تمام آیات کا متن آف لائن محفوظ کریں',l_store:'اسٹوریج (MB)',off_prog:'محفوظ ہو رہا ہے',off_done:'محفوظ ہوا',off_stop:'روکنے کے لیے دوبارہ بٹن دبائیں',off_warn:'پورے قرآن کے لیے کئی GB جگہ اور کافی وقت درکار ہو سکتا ہے۔ جاری رکھیں؟',off_nofav:'ابھی کوئی پسندیدہ سورۃ نہیں۔ پہلے سورۃ پر ستارہ دبائیں۔',sy_ref:'ایک حوالہ قاری کی بنیاد پر بہتر اندازہ۔ بٹنوں سے درست کریں۔',share:'شیئر کریں',wa:'واٹس ایپ',inst:'ایپ انسٹال کریں',ios:'آئی فون پر: شیئر دبائیں، پھر Add to Home Screen۔',h_loc:'آپ کا مقام',b_gl:'میرا مقام استعمال کریں',b_search:'تلاش',ph_city:'دنیا کا کوئی بھی شہر تلاش کریں',l_pk:'پاکستان کے شہر',o_pick:'شہر منتخب کریں…',l_cur:'موجودہ مقام',myloc:'میرا مقام',loc_set:'مقام محفوظ ہو گیا۔ حساب کا طریقہ خود بخود چنا گیا؛ اگر آپ کی مسجد کا طریقہ مختلف ہو تو ترتیبات میں بدل لیں۔',loc_err:'آپ کا مقام معلوم نہیں ہو سکا۔ مقام کی اجازت دیں یا اپنا شہر تلاش کریں۔',no_res:'کوئی نتیجہ نہیں ملا۔',srch_err:'تلاش نہیں ہو سکی۔ انٹرنیٹ چیک کریں۔',tzn:'نماز کے اوقات اس ڈیوائس کے ٹائم زون کے مطابق ہیں اور آپ کی مسجد سے چند منٹ مختلف ہو سکتے ہیں۔',w_title:'خوش آمدید',w1:'1. قرآن چلانے کے لیے شروع کریں دبائیں۔ اذان اور ممنوع اوقات میں یہ رک جاتا ہے۔',w2:'2. نماز کے درست اوقات کے لیے اپنا مقام مقرر کریں۔',w3:'3. قاری اور سورۃ چنیں۔ جو آیت پڑھی جا رہی ہو وہ ترجمے کے ساتھ نمایاں ہوتی ہے۔',w4:'4. مفت ہے، اکاؤنٹ نہیں چاہیے۔ آپ کی ترتیبات آپ کی ڈیوائس پر رہتی ہیں۔',b_ok:'ٹھیک ہے',share_txt:'اذان کے وقفوں، اردو ترجمے اور نمایاں آیات کے ساتھ مفت قرآن پلیئر:',copied:'لنک کاپی ہو گیا۔ شیئر کرنے کے لیے پیسٹ کریں۔',m_i:'ISNA (شمالی امریکہ)',m_e:'مصری',m_u:'ام القریٰ (مکہ)',h_about:'تعارف',about:'مفت اور بغیر اکاؤنٹ۔ ترتیبات صرف اس ڈیوائس پر محفوظ ہوتی ہیں۔ تلاوت کی آڈیو: mp3quran.net اور quran.com۔ آیات، ترجمہ اور تفسیر: alquran.cloud۔ شہر کی تلاش: Open-Meteo۔ وسیع استعمال سے پہلے ہر سروس کی شرائط دیکھ لیں۔',start:'شروع کریں',stop:'بند کریں',prev:'پچھلی',next:'اگلی سورۃ',s_stopped:'رکا ہوا ہے',s_playing:'تلاوت جاری ہے',s_paused:'وقفہ:',s_outside:'مقررہ اوقات سے باہر',s_resumes:'دوبارہ شروع ہوگا',s_next:'اگلا وقفہ',s_until:'چلے گا تا',s_press:'شروع کریں کا بٹن دبائیں۔',s_err:'رابطے میں مسئلہ، دوبارہ کوشش ہو رہی ہے…',s_txterr:'آیات لوڈ نہیں ہو سکیں۔ انٹرنیٹ چیک کریں۔',loading:'آیات لوڈ ہو رہی ہیں…',tap:'تلاوت شروع کرنے کے لیے OK دبائیں یا اسکرین کو ٹچ کریں۔',l_vol:'آواز',l_sleep:'سلیپ ٹائمر (منٹ)',o_off:'بند',o_on:'چالو',l_reciter:'قاری',g_q:'درست آیت ہم آہنگی',g_m:'اندازاً آیت ہم آہنگی',l_style:'تلاوت کا انداز',l_surah:'سورۃ',l_fav:'پسندیدہ',l_after:'سورۃ ختم ہونے کے بعد',o_cont:'اگلی سورۃ جاری رکھیں',o_rep:'یہی سورۃ دہرائیں',l_play:'چلنے کا وقت',o_all:'پورا دن (24 گھنٹے)',o_set:'صرف مقررہ گھنٹے',l_sh:'شروع کا گھنٹہ',l_sm:'شروع کا منٹ',l_hr:'کتنے گھنٹے چلائیں',l_vs:'آیات',o_show:'دکھائیں',o_hide:'چھپائیں',l_ed:'ترجمہ',o_none:'کوئی نہیں',l_tf:'تفسیر',l_fs:'متن کا سائز',o_norm:'عام',o_large:'بڑا',o_xl:'بہت بڑا',l_as:'تلاوت والی آیت کے ساتھ چلیں',b_hb:'ہائی لائٹ پہلے',b_hf:'ہائی لائٹ بعد میں',sy_exact:'اس قاری کے ساتھ آیت کی درست ہم آہنگی۔',sy_est:'آیت کی اندازاً ہم آہنگی۔ بٹنوں سے درست کریں۔',h_dl:'ڈاؤن لوڈ اور آف لائن',b_pdf:'پی ڈی ایف',b_aud:'آڈیو (MP3)',b_vid:'ویڈیو (ریکارڈ)',b_vidx:'ویڈیو بند کریں',b_off:'یہ سورۃ آف لائن محفوظ کریں',b_offx:'آف لائن فائلیں مٹائیں',l_saved:'آف لائن محفوظ',h_sched:'آج کا شیڈول',th_p:'نماز',th_t:'وقت',th_q:'قرآن رکے گا',p_Fajr:'فجر',p_Sunrise:'طلوع آفتاب',p_Dhuhr:'ظہر',p_Asr:'عصر',p_Maghrib:'مغرب',p_Isha:'عشاء',azan:'اذان',jumuah:'جمعہ',w_sr:'طلوع آفتاب (ممنوع وقت)',w_zw:'زوال (ممنوع وقت)',w_ss:'غروب (ممنوع وقت)',lg_a:'اذان کا وقفہ',lg_p:'ممنوع وقت',nextprayer:'اگلی نماز',in:'میں',not_paused:'وقفہ نہیں',h_plan:'روزانہ منصوبہ',l_day:'دن',o_every:'ہر روز',o_fri:'صرف جمعہ',b_add:'منصوبے میں شامل کریں',b_kahf:'جمعہ: سورۃ الکہف شامل کریں',pl_none:'ابھی کوئی منصوبہ نہیں۔',h_set:'ترتیبات',l_city:'شہر',l_meth:'حساب کا طریقہ',m_k:'کراچی (حنفی عصر)',m_m:'مسلم ورلڈ لیگ',l_az:'اذان کے بعد وقفہ (منٹ)',l_jm:'جمعہ کی نماز کا وقفہ (منٹ)',l_sr:'طلوع کے بعد (منٹ)',l_zw:'ظہر سے پہلے (منٹ)',l_ss:'مغرب سے پہلے (منٹ)',l_pr:'طلوع، زوال اور غروب پر وقفہ',o_yes:'ہاں',o_no:'نہیں',l_hj:'ہجری تاریخ میں فرق (دن)',l_auto:'کھولتے ہی خود شروع ہو',l_azs:'اذان کی آواز چلائیں',l_azf:'اذان کی فائل',l_fjf:'فجر کی اذان کی فائل (اختیاری)',l_azu:'یا اذان کا لنک',b_test:'اذان آزمائیں',l_adj:'اپنی مسجد کے مطابق ہر نماز کے منٹ ایڈجسٹ کریں:',note_tv:'ٹی وی کا ٹائم زون درست رکھیں اور اسکرین سیور بند کریں۔ اذان کی آوازیں شامل نہیں؛ اپنی فائل یا لنک شامل کریں۔',saved:'محفوظ ہو گیا۔',nofile:'اذان کی فائل یا لنک مقرر نہیں۔'}};
+var T={en:{b_learn:'Learn',t_kids:'Kids: verse practice',t_qaida:'Noorani Qaida',v_title:'Play a verse',b_pv:'Play verse',ph_jump:'Go to verse, e.g. 2:255',b_go:'Go',l_vm:'After the verse',vm_surah:'Continue to the end of the surah',vm_one:'Play only this verse',vm_rep:'Repeat this verse',l_vn:'Repeat how many times',v_bad:'Check the surah and verse number',c_title:'For parents and teachers',c_a:'I am an adult (18 or older) and a Muslim parent, guardian or teacher.',c_b:'I will use this with my own children or students and I will supervise them.',c_c:'I have read the privacy policy. The app has no accounts or ads, and progress stays on this device.',c_ok:'I agree and continue',k_help:'Pick a surah and press Start. Each verse plays, then there is a quiet moment for your child to repeat it.',k_rep:'Repeats of each verse',k_spd:'Speed',k_prev:'Previous verse',k_next:'Next verse',k_listen:'Listen…',k_turn:'Your turn! Repeat after me.',k_done:'Well done!',l_verse:'Verse',q_done:'Mark lesson done',q_practice:'Practice',q_next:'Next',q_ok:'Correct!',q_no:'Try again',q_note:'This app has no audio for these lessons. Practise with a teacher.',sec_listen:'Listen',sec_when:'When to play',sec_verses:'Verses and translation',sec_pray:'Prayer times and location',sec_azan:'Azan and pauses',sec_more:'More',b_opt:'Options',b_close:'Close',tagline:'Recitation that pauses for azan',privacy:'Privacy policy',b_sfav:'Save favorites offline',b_sall:'Save whole Quran offline',b_stx:'Save all verses text offline',l_store:'Storage (MB)',off_prog:'Saving',off_done:'Saved',off_stop:'press the button again to stop',off_warn:'The whole Quran can need several GB of space and a long time. Continue?',off_nofav:'No favorites yet. Tap the star on a surah first.',sy_ref:'Improved estimate based on a reference reciter. Use the buttons to adjust.',share:'Share',wa:'WhatsApp',inst:'Install app',ios:'On iPhone: tap Share, then Add to Home Screen.',h_loc:'Your location',b_gl:'Use my location',b_search:'Search',ph_city:'Search any city in the world',l_pk:'Pakistan quick pick',o_pick:'Choose a city…',l_cur:'Current location',myloc:'My location',loc_set:'Location saved. The calculation method was set automatically; change it in Settings if your mosque uses another.',loc_err:'Could not get your location. Allow location access, or search for your city.',no_res:'No results.',srch_err:'Could not search. Check internet.',tzn:'Prayer times use this device’s time zone and can differ by a few minutes from your mosque.',w_title:'Welcome',w1:'1. Press Start to play the Quran. It pauses for azan and prohibited prayer times.',w2:'2. Set your location so prayer times are correct.',w3:'3. Choose a reciter and surah. The verse being recited is highlighted, with translation.',w4:'4. Free, no account. Your settings stay on your device.',b_ok:'Got it',share_txt:'Free Quran player with azan pauses, Urdu translation and highlighted verses:',copied:'Link copied. Paste it to share.',m_i:'ISNA (North America)',m_e:'Egyptian',m_u:'Umm al-Qura (Makkah)',h_about:'About',about:'Free to use, with no account. Settings are saved only on this device. Recitation audio: mp3quran.net and quran.com. Verses, translations and tafseer: alquran.cloud. City search: Open-Meteo. Please check each service’s terms before wider use.',start:'Start',stop:'Stop',prev:'Previous',next:'Next surah',s_stopped:'Stopped',s_playing:'Playing',s_paused:'Paused for',s_outside:'Outside your play hours',s_resumes:'Resumes at',s_next:'Next pause',s_until:'Plays until',s_press:'Press OK on Start.',s_err:'Connection problem. Retrying…',s_txterr:'Could not load the verses. Check internet.',loading:'Loading verses…',tap:'Press OK or tap anywhere to start playing.',l_vol:'Volume',l_sleep:'Sleep timer (minutes)',o_off:'Off',o_on:'On',l_reciter:'Reciter (qari)',g_q:'Exact verse sync',g_m:'Estimated verse sync',l_style:'Recitation style',l_surah:'Surah',l_fav:'Favorites',l_after:'After the surah ends',o_cont:'Continue to next surah',o_rep:'Repeat this surah',l_play:'Play time',o_all:'All day (24 hours)',o_set:'Only for set hours',l_sh:'Start hour',l_sm:'Start minute',l_hr:'Play for (hours)',l_vs:'Verses',o_show:'Show',o_hide:'Hide',l_ed:'Translation',o_none:'None',l_tf:'Tafseer',l_fs:'Text size',o_norm:'Normal',o_large:'Large',o_xl:'Extra large',l_as:'Follow the verse being recited',b_hb:'Highlight earlier',b_hf:'Highlight later',sy_exact:'Exact verse sync with this reciter.',sy_est:'Estimated verse sync. Use the buttons to adjust.',h_dl:'Download and offline',b_pdf:'PDF',b_aud:'Audio (MP3)',b_vid:'Video (record)',b_vidx:'Stop video',b_off:'Save this surah offline',b_offx:'Delete offline files',l_saved:'Saved offline',h_sched:'Today’s schedule',th_p:'Prayer',th_t:'Time',th_q:'Quran pauses',p_Fajr:'Fajr',p_Sunrise:'Sunrise',p_Dhuhr:'Dhuhr',p_Asr:'Asr',p_Maghrib:'Maghrib',p_Isha:'Isha',azan:'azan',jumuah:'Jumu’ah',w_sr:'Sunrise (prohibited time)',w_zw:'Noon (prohibited time)',w_ss:'Sunset (prohibited time)',lg_a:'Azan pause',lg_p:'Prohibited time',nextprayer:'Next prayer',in:'in',not_paused:'Not paused',h_plan:'Daily plan',l_day:'Day',o_every:'Every day',o_fri:'Friday only',b_add:'Add to plan',b_kahf:'Add Friday: Surah Al-Kahf',pl_none:'No plan items yet.',h_set:'Settings',l_city:'City',l_meth:'Calculation method',m_k:'Karachi (Hanafi Asr)',m_m:'Muslim World League',l_az:'Pause after azan (min)',l_jm:'Friday Jumu’ah pause (min)',l_sr:'After sunrise (min)',l_zw:'Before Dhuhr (min)',l_ss:'Before Maghrib (min)',l_pr:'Pause at sunrise, noon, sunset',o_yes:'Yes',o_no:'No',l_hj:'Hijri date adjust (days)',l_auto:'Start automatically when opened',l_azs:'Play azan sound',l_azf:'Azan sound file',l_fjf:'Fajr azan file (optional)',l_azu:'Or azan link',b_test:'Test azan',l_adj:'Adjust minutes per prayer to match your mosque:',note_tv:'Set the TV time zone correctly and turn off the screensaver. Azan sounds are not included; add your own file or link.',saved:'Saved.',nofile:'No azan file or link set.'},
+ur:{b_learn:'سیکھیں',t_kids:'بچوں کے لیے آیات کی مشق',t_qaida:'نورانی قاعدہ',v_title:'آیت چلائیں',b_pv:'آیت چلائیں',ph_jump:'آیت پر جائیں، مثلاً 2:255',b_go:'چلائیں',l_vm:'آیت کے بعد',vm_surah:'سورۃ کے آخر تک جاری رکھیں',vm_one:'صرف یہی آیت چلائیں',vm_rep:'یہی آیت دہرائیں',l_vn:'کتنی بار دہرائیں',v_bad:'سورۃ اور آیت کا نمبر دیکھیں',c_title:'والدین اور اساتذہ کے لیے',c_a:'میں بالغ (18 سال یا زیادہ) اور مسلمان والد/والدہ، سرپرست یا استاد ہوں۔',c_b:'میں اسے اپنے بچوں یا شاگردوں کے ساتھ استعمال کروں گا/گی اور ان کی نگرانی کروں گا/گی۔',c_c:'میں نے پرائیویسی پالیسی پڑھ لی ہے۔ ایپ میں اکاؤنٹ یا اشتہار نہیں اور پیش رفت صرف اس ڈیوائس پر رہتی ہے۔',c_ok:'میں متفق ہوں، آگے بڑھیں',k_help:'سورۃ چنیں اور شروع کریں دبائیں۔ ہر آیت چلتی ہے، پھر بچے کے دہرانے کے لیے خاموشی ہوتی ہے۔',k_rep:'ہر آیت کتنی بار',k_spd:'رفتار',k_prev:'پچھلی آیت',k_next:'اگلی آیت',k_listen:'سنیں…',k_turn:'اب آپ کی باری! دہرائیں۔',k_done:'شاباش!',l_verse:'آیت',q_done:'سبق مکمل',q_practice:'مشق',q_next:'اگلا',q_ok:'درست!',q_no:'دوبارہ کوشش کریں',q_note:'ان اسباق کے ساتھ آواز شامل نہیں۔ استاد کے ساتھ مشق کریں۔',sec_listen:'سنیں',sec_when:'چلنے کا وقت',sec_verses:'آیات اور ترجمہ',sec_pray:'نماز کے اوقات اور مقام',sec_azan:'اذان اور وقفے',sec_more:'مزید',b_opt:'اختیارات',b_close:'بند کریں',tagline:'اذان کے وقفوں کے ساتھ تلاوت',privacy:'پرائیویسی پالیسی',b_sfav:'پسندیدہ سورتیں آف لائن محفوظ کریں',b_sall:'پورا قرآن آف لائن محفوظ کریں',b_stx:'تمام آیات کا متن آف لائن محفوظ کریں',l_store:'اسٹوریج (MB)',off_prog:'محفوظ ہو رہا ہے',off_done:'محفوظ ہوا',off_stop:'روکنے کے لیے دوبارہ بٹن دبائیں',off_warn:'پورے قرآن کے لیے کئی GB جگہ اور کافی وقت درکار ہو سکتا ہے۔ جاری رکھیں؟',off_nofav:'ابھی کوئی پسندیدہ سورۃ نہیں۔ پہلے سورۃ پر ستارہ دبائیں۔',sy_ref:'ایک حوالہ قاری کی بنیاد پر بہتر اندازہ۔ بٹنوں سے درست کریں۔',share:'شیئر کریں',wa:'واٹس ایپ',inst:'ایپ انسٹال کریں',ios:'آئی فون پر: شیئر دبائیں، پھر Add to Home Screen۔',h_loc:'آپ کا مقام',b_gl:'میرا مقام استعمال کریں',b_search:'تلاش',ph_city:'دنیا کا کوئی بھی شہر تلاش کریں',l_pk:'پاکستان کے شہر',o_pick:'شہر منتخب کریں…',l_cur:'موجودہ مقام',myloc:'میرا مقام',loc_set:'مقام محفوظ ہو گیا۔ حساب کا طریقہ خود بخود چنا گیا؛ اگر آپ کی مسجد کا طریقہ مختلف ہو تو ترتیبات میں بدل لیں۔',loc_err:'آپ کا مقام معلوم نہیں ہو سکا۔ مقام کی اجازت دیں یا اپنا شہر تلاش کریں۔',no_res:'کوئی نتیجہ نہیں ملا۔',srch_err:'تلاش نہیں ہو سکی۔ انٹرنیٹ چیک کریں۔',tzn:'نماز کے اوقات اس ڈیوائس کے ٹائم زون کے مطابق ہیں اور آپ کی مسجد سے چند منٹ مختلف ہو سکتے ہیں۔',w_title:'خوش آمدید',w1:'1. قرآن چلانے کے لیے شروع کریں دبائیں۔ اذان اور ممنوع اوقات میں یہ رک جاتا ہے۔',w2:'2. نماز کے درست اوقات کے لیے اپنا مقام مقرر کریں۔',w3:'3. قاری اور سورۃ چنیں۔ جو آیت پڑھی جا رہی ہو وہ ترجمے کے ساتھ نمایاں ہوتی ہے۔',w4:'4. مفت ہے، اکاؤنٹ نہیں چاہیے۔ آپ کی ترتیبات آپ کی ڈیوائس پر رہتی ہیں۔',b_ok:'ٹھیک ہے',share_txt:'اذان کے وقفوں، اردو ترجمے اور نمایاں آیات کے ساتھ مفت قرآن پلیئر:',copied:'لنک کاپی ہو گیا۔ شیئر کرنے کے لیے پیسٹ کریں۔',m_i:'ISNA (شمالی امریکہ)',m_e:'مصری',m_u:'ام القریٰ (مکہ)',h_about:'تعارف',about:'مفت اور بغیر اکاؤنٹ۔ ترتیبات صرف اس ڈیوائس پر محفوظ ہوتی ہیں۔ تلاوت کی آڈیو: mp3quran.net اور quran.com۔ آیات، ترجمہ اور تفسیر: alquran.cloud۔ شہر کی تلاش: Open-Meteo۔ وسیع استعمال سے پہلے ہر سروس کی شرائط دیکھ لیں۔',start:'شروع کریں',stop:'بند کریں',prev:'پچھلی',next:'اگلی سورۃ',s_stopped:'رکا ہوا ہے',s_playing:'تلاوت جاری ہے',s_paused:'وقفہ:',s_outside:'مقررہ اوقات سے باہر',s_resumes:'دوبارہ شروع ہوگا',s_next:'اگلا وقفہ',s_until:'چلے گا تا',s_press:'شروع کریں کا بٹن دبائیں۔',s_err:'رابطے میں مسئلہ، دوبارہ کوشش ہو رہی ہے…',s_txterr:'آیات لوڈ نہیں ہو سکیں۔ انٹرنیٹ چیک کریں۔',loading:'آیات لوڈ ہو رہی ہیں…',tap:'تلاوت شروع کرنے کے لیے OK دبائیں یا اسکرین کو ٹچ کریں۔',l_vol:'آواز',l_sleep:'سلیپ ٹائمر (منٹ)',o_off:'بند',o_on:'چالو',l_reciter:'قاری',g_q:'درست آیت ہم آہنگی',g_m:'اندازاً آیت ہم آہنگی',l_style:'تلاوت کا انداز',l_surah:'سورۃ',l_fav:'پسندیدہ',l_after:'سورۃ ختم ہونے کے بعد',o_cont:'اگلی سورۃ جاری رکھیں',o_rep:'یہی سورۃ دہرائیں',l_play:'چلنے کا وقت',o_all:'پورا دن (24 گھنٹے)',o_set:'صرف مقررہ گھنٹے',l_sh:'شروع کا گھنٹہ',l_sm:'شروع کا منٹ',l_hr:'کتنے گھنٹے چلائیں',l_vs:'آیات',o_show:'دکھائیں',o_hide:'چھپائیں',l_ed:'ترجمہ',o_none:'کوئی نہیں',l_tf:'تفسیر',l_fs:'متن کا سائز',o_norm:'عام',o_large:'بڑا',o_xl:'بہت بڑا',l_as:'تلاوت والی آیت کے ساتھ چلیں',b_hb:'ہائی لائٹ پہلے',b_hf:'ہائی لائٹ بعد میں',sy_exact:'اس قاری کے ساتھ آیت کی درست ہم آہنگی۔',sy_est:'آیت کی اندازاً ہم آہنگی۔ بٹنوں سے درست کریں۔',h_dl:'ڈاؤن لوڈ اور آف لائن',b_pdf:'پی ڈی ایف',b_aud:'آڈیو (MP3)',b_vid:'ویڈیو (ریکارڈ)',b_vidx:'ویڈیو بند کریں',b_off:'یہ سورۃ آف لائن محفوظ کریں',b_offx:'آف لائن فائلیں مٹائیں',l_saved:'آف لائن محفوظ',h_sched:'آج کا شیڈول',th_p:'نماز',th_t:'وقت',th_q:'قرآن رکے گا',p_Fajr:'فجر',p_Sunrise:'طلوع آفتاب',p_Dhuhr:'ظہر',p_Asr:'عصر',p_Maghrib:'مغرب',p_Isha:'عشاء',azan:'اذان',jumuah:'جمعہ',w_sr:'طلوع آفتاب (ممنوع وقت)',w_zw:'زوال (ممنوع وقت)',w_ss:'غروب (ممنوع وقت)',lg_a:'اذان کا وقفہ',lg_p:'ممنوع وقت',nextprayer:'اگلی نماز',in:'میں',not_paused:'وقفہ نہیں',h_plan:'روزانہ منصوبہ',l_day:'دن',o_every:'ہر روز',o_fri:'صرف جمعہ',b_add:'منصوبے میں شامل کریں',b_kahf:'جمعہ: سورۃ الکہف شامل کریں',pl_none:'ابھی کوئی منصوبہ نہیں۔',h_set:'ترتیبات',l_city:'شہر',l_meth:'حساب کا طریقہ',m_k:'کراچی (حنفی عصر)',m_m:'مسلم ورلڈ لیگ',l_az:'اذان کے بعد وقفہ (منٹ)',l_jm:'جمعہ کی نماز کا وقفہ (منٹ)',l_sr:'طلوع کے بعد (منٹ)',l_zw:'ظہر سے پہلے (منٹ)',l_ss:'مغرب سے پہلے (منٹ)',l_pr:'طلوع، زوال اور غروب پر وقفہ',o_yes:'ہاں',o_no:'نہیں',l_hj:'ہجری تاریخ میں فرق (دن)',l_auto:'کھولتے ہی خود شروع ہو',l_azs:'اذان کی آواز چلائیں',l_azf:'اذان کی فائل',l_fjf:'فجر کی اذان کی فائل (اختیاری)',l_azu:'یا اذان کا لنک',b_test:'اذان آزمائیں',l_adj:'اپنی مسجد کے مطابق ہر نماز کے منٹ ایڈجسٹ کریں:',note_tv:'ٹی وی کا ٹائم زون درست رکھیں اور اسکرین سیور بند کریں۔ اذان کی آوازیں شامل نہیں؛ اپنی فائل یا لنک شامل کریں۔',saved:'محفوظ ہو گیا۔',nofile:'اذان کی فائل یا لنک مقرر نہیں۔'}};
 function t(k){return (T[S.lang]&&T[S.lang][k])||T.en[k]||k}
 /* ---------- state ---------- */
 var running=false,rec=null,ldg=false,lt=0,track=ALL.slice(),names={},namesAr={},rcs=[],rc={},tc={},ays=[],cum=[],curI=-1,ex=false,sf=[],curInfo=null,needT=false,errN=0,sleepEnd=0,azKey='',pdone={},lastBlob=null,wk=null;
@@ -384,7 +436,7 @@ function fillMo(){
 function fillSu(){
   var h=track.map(function(n){return'<option value="'+n+'">'+n+'. '+sname(n)+(namesAr[n]?' – '+namesAr[n]:'')+'</option>'}).join('');
   $('su').innerHTML=h;$('su').value=S.cur;$('ps').innerHTML=ALL.map(function(n){return'<option value="'+n+'">'+n+'. '+sname(n)+'</option>'}).join('');
-  favUi();
+  favUi();fillKs();
 }
 function resolveQ(r,n){
   var key=r.id+':'+n;if(rc[key]&&rc[key].ends)return Promise.resolve(rc[key]);
@@ -416,7 +468,7 @@ function setGo(){var b=$('go'),k=running?'stop':'start';b.setAttribute('data-t',
 function load(i,pos){
   if(!track.length)return;
   i=((i%track.length)+track.length)%track.length;var n=track[i];S.cur=n;S.pos=pos||0;save();
-  var my=++lt;ldg=true;curInfo=null;$('su').value=n;shownm();dnTxt();favUi();loadText(n);
+  var my=++lt;ldg=true;curInfo=null;$('su').value=n;fillVv();shownm();dnTxt();favUi();loadText(n);
   return resolve(n).then(function(o){
     if(my!==lt)return;curInfo=o;
     return offUrl(o.url).then(function(ou){
@@ -425,19 +477,18 @@ function load(i,pos){
       if(pos)au.addEventListener('loadedmetadata',function f(){au.removeEventListener('loadedmetadata',f);try{au.currentTime=pos}catch(e){}});
       buildSync();ldg=false;
       try{if('mediaSession' in navigator)navigator.mediaSession.metadata=new MediaMetadata({title:sname(n),artist:(R()||{}).name||'Quran'})}catch(e){}
-      if(running&&!blocked()&&!rec)play();
+      if(running&&(!blocked()||ovr)&&!rec&&!pendingV)play();
     });
   }).catch(function(){if(my!==lt)return;ldg=false;$('sn').textContent=t('s_err');errN++;setTimeout(function(){if(running&&my===lt)load(errN>6?i+1:i,pos)},Math.min(60000,3000*errN))});
 }
 function idxOf(n){var i=track.indexOf(n);return i<0?0:i}
-au.onended=function(){load(S.md==='repeat'?idxOf(S.cur):idxOf(S.cur)+1)};
 au.onerror=function(){if(!au.src||ldg)return;errN++;$('sn').textContent=t('s_err');var p=au.currentTime||S.pos;setTimeout(function(){if(running)load(errN>6?idxOf(S.cur)+1:idxOf(S.cur),p)},Math.min(60000,3000*errN))};
 au.onplaying=function(){errN=0;needTap(false)};
 au.ontimeupdate=function(){hl(false)};
-au.onloadedmetadata=function(){hl(true)};
-$('nx').onclick=function(){load(idxOf(S.cur)+1)};
-$('pv').onclick=function(){load(idxOf(S.cur)-1)};
-$('su').onchange=function(){load(idxOf(+$('su').value))};
+au.onloadedmetadata=function(){hl(true);if(pendingV)seekVerse(pendingV)};
+$('nx').onclick=function(){clearV();load(idxOf(S.cur)+1)};
+$('pv').onclick=function(){clearV();load(idxOf(S.cur)-1)};
+$('su').onchange=function(){clearV();load(idxOf(+$('su').value))};
 function shownm(){var n=S.cur;$('nma').textContent=namesAr[n]||'';$('nme').textContent='Surah '+n+' · '+sname(n)+(curI>=0&&ays.length?' · '+(curI+1)+'/'+ays.length:'')}
 function dnTxt(){$('dn').textContent='Surah '+S.cur+' · '+sname(S.cur)}
 /* ---------- verses ---------- */
@@ -464,7 +515,7 @@ function buildSync(){
     else if(refKey!==key){refKey=key;refCum=null;refEnds(S.cur).then(function(e){if(!e||refKey!==key)return;var c=[];for(var i=0;i<ays.length;i++){if(e[i+1]===undefined)return;c.push(e[i+1])}refCum=c;buildSync()})}
   }
   $('sy').textContent=ays.length||curInfo?t(ex?'sy_exact':imp?'sy_ref':'sy_est'):'';$('tb').className='row'+(ex?' hide':'');
-  curI=-1;hl(true);
+  curI=-1;hl(true);if(pendingV)seekVerse(pendingV);
 }
 function hl(force){
   if(!ays.length)return;
@@ -476,8 +527,7 @@ function hl(force){
 }
 function loadText(n){
   var box=$('tx');ays=[];cum=[];curI=-1;
-  if(!+S.vs){box.className='hide';return}
-  box.className='';box.scrollTop=0;box.textContent=t('loading');
+  var vis=+S.vs;box.className=vis?'':'hide';box.scrollTop=0;if(vis)box.textContent=t('loading');
   getText(n).then(function(d){
     if(S.cur!==n)return;box.innerHTML='';var acc=0,ti=S.ed!=='none'?1:-1,fi=S.tf?(ti>0?2:1):-1;
     d[0].ayahs.forEach(function(a,i){
@@ -486,7 +536,7 @@ function loadText(n){
       if(ti>0&&d[ti].ayahs[i]){var u=document.createElement('div');u.className=S.ed.slice(0,2)==='ur'?'ur':'en';u.textContent=d[ti].ayahs[i].text;w.appendChild(u)}
       if(fi>0&&d[fi].ayahs[i]){var f=document.createElement('div');f.className='tf';f.textContent=d[fi].ayahs[i].text;w.appendChild(f)}
       box.appendChild(w);ays.push(w);acc+=lets(a.text)+12;cum.push(acc);
-      w.onclick=function(){if(ex){au.currentTime=sf[i]}else if(au.duration){au.currentTime=Math.max(0,(i?cum[i-1]:0)/cum[cum.length-1]-S.off/100)*au.duration}hl(true)};
+      w.onclick=function(){playVerse(n,i+1)};
     });
     buildSync();
   }).catch(function(){box.textContent=t('s_txterr')});
@@ -500,7 +550,7 @@ function favUi(){
   $('fvs').innerHTML='<option value="">—</option>'+S.fav.map(function(n){return'<option value="'+n+'">'+n+'. '+sname(n)+'</option>'}).join('');
 }
 $('fv').onclick=function(){var i=S.fav.indexOf(S.cur);if(i>=0)S.fav.splice(i,1);else S.fav.push(S.cur);save();favUi()};
-$('fvs').onchange=function(){var n=+$('fvs').value;if(n)load(idxOf(n))};
+$('fvs').onchange=function(){var n=+$('fvs').value;if(n){clearV();load(idxOf(n))}};
 /* ---------- plan ---------- */
 function planUi(){
   var h='';S.plan.forEach(function(p,i){h+='<div class="pi"><span>'+(p.d==='fri'?t('o_fri'):t('o_every'))+' · '+p.h+':'+('0'+p.m).slice(-2)+' '+p.a+' · '+p.s+'. '+sname(p.s)+' · '+(p.md==='repeat'?t('o_rep'):t('o_cont'))+'</span><button class="sm" data-i="'+i+'">✕</button></div>'});
@@ -513,7 +563,7 @@ function planTick(n){
   S.plan.forEach(function(p,i){
     if(p.d==='fri'&&n.getDay()!==5)return;
     var st=new Date(n);st.setHours(p.h%12+(p.a==='PM'?12:0),+p.m,0,0);var key=n.toDateString()+i+p.s;
-    if(n>=st&&n-st<90000&&!pdone[key]){pdone[key]=1;S.md=p.md;$('md').value=p.md;load(idxOf(p.s))}
+    if(n>=st&&n-st<90000&&!pdone[key]){pdone[key]=1;S.md=p.md;$('md').value=p.md;clearV();load(idxOf(p.s))}
   });
 }
 /* ---------- tick ---------- */
@@ -522,14 +572,14 @@ function azanMaybe(w,n){
   if(n-w.s>120000)return;azPlay(w.n);
 }
 function tick(){
-  var n=new Date(),a=blocked();
+  var n=new Date(),a=ovr?null:blocked();
   $('nowm').style.left=(n-at(n,0))/864e5*100+'%';
   if(sleepEnd){var rem=sleepEnd-n.getTime();
-    if(rem<=0){sleepEnd=0;$('sl').value='0';running=false;S.run=0;save();au.pause();au.volume=S.vol/100;setGo()}
+    if(rem<=0){sleepEnd=0;$('sl').value='0';running=false;S.run=0;save();clearV();au.pause();au.volume=S.vol/100;setGo()}
     else if(rem<30000)au.volume=Math.max(0,S.vol/100*rem/30000)}
   if(running){
     if(a){if(!au.paused)au.pause();if(a.win)azanMaybe(a.win,n)}
-    else if(au.paused&&au.src&&!rec&&!ldg&&!azPlaying()&&!needT)play();
+    else if(au.paused&&au.src&&!rec&&!ldg&&!gapOn&&!azPlaying()&&!needT)play();
     planTick(n);
   }
   var dot=$('dot'),st=$('st'),sn=$('sn');
@@ -543,19 +593,220 @@ function tick(){
   $('dt').textContent=dateLine();
   var np=nextPrayer();$('cd').textContent=np?t('nextprayer')+': '+t('p_'+np.p)+' '+t('in')+' '+hms(np.d-n):'';
 }
+/* ---------- play a chosen verse ---------- */
+function vStartT(i){return ex?sf[i]:Math.max(0,(i?cum[i-1]:0)/cum[cum.length-1]-S.off/100)*au.duration}
+function vEndT(i){if(i>=ays.length-1)return au.duration;return ex?sf[i+1]:Math.max(0,cum[i]/cum[cum.length-1]-S.off/100)*au.duration}
+function clearV(){vsess=null;ovr=false;pendingV=null;gapOn=false;clearTimeout(kTimer);try{au.playbackRate=1}catch(e){}}
+function startRun(){running=true;S.run=1;save();setGo();lock();needTap(false)}
+function stopRun(){running=false;S.run=0;save();setGo();au.pause()}
+function fillVv(){var c=VC[S.cur-1]||0,h='';for(var i=1;i<=c;i++)h+='<option value="'+i+'">'+i+'</option>';$('vv').innerHTML=h}
+function playVerse(n,a,opt){
+  opt=opt||{};clearTimeout(kTimer);gapOn=false;
+  var left=opt.left||(S.vm==='rep'?(+S.vn||2):1);
+  var s={n:n,a:a,mode:opt.mode||S.vm,left:left,reps:left,speed:opt.speed||1,kid:!!opt.kid,start:0,end:0};
+  vsess=s;ovr=true;startRun();
+  if(S.cur!==n||!au.src||!curInfo){pendingV=s;load(idxOf(n),0)}else seekVerse(s);
+  tick();
+}
+function seekVerse(s){
+  if(vsess!==s)return;
+  if(S.cur!==s.n||!ays.length||!(au.duration>0)||ldg){pendingV=s;return}
+  pendingV=null;var i=s.a-1;if(i<0||i>=ays.length){clearV();return}
+  s.start=vStartT(i);s.end=vEndT(i);
+  try{au.playbackRate=s.speed||1}catch(e){}
+  try{au.currentTime=s.start}catch(e){}
+  play();hl(true);if(s.kid)kUi('listen');
+  if($('vv').value!=String(s.a))$('vv').value=s.a;
+}
+function vDone(s){
+  if(s.mode==='kid'){au.pause();kGap(s);return}
+  if(s.mode==='rep'&&--s.left>0){au.currentTime=s.start;return}
+  vsess=null;ovr=false;try{au.playbackRate=1}catch(e){}
+  if(s.mode==='one'||s.mode==='rep')stopRun();
+}
+function vCheck(){
+  var s=vsess;if(!s||!s.end||au.paused||pendingV||gapOn)return;
+  if(au.currentTime>=s.end-0.04)vDone(s);
+}
+setInterval(vCheck,80);
+au.onended=function(){
+  var s=vsess;
+  if(s){
+    if(s.mode==='kid'){kGap(s);return}
+    if(s.mode==='rep'&&--s.left>0){au.currentTime=s.start;play();return}
+    vsess=null;ovr=false;try{au.playbackRate=1}catch(e){}
+    if(s.mode!=='surah'){stopRun();return}
+  }
+  load(S.md==='repeat'?idxOf(S.cur):idxOf(S.cur)+1);
+};
+function jump(){
+  var m=/(\d{1,3})\s*[:.\-\/]\s*(\d{1,3})/.exec($('jv').value);if(!m)return;
+  var n=+m[1],a=+m[2];
+  if(n<1||n>114||a<1||a>VC[n-1]){$('jv').value='';$('jv').placeholder=t('v_bad');return}
+  $('jv').value='';playVerse(n,a);
+}
+$('jg').onclick=jump;$('jv').onkeydown=function(e){if(e.key==='Enter')jump()};
+$('vp').onclick=function(){playVerse(S.cur,+$('vv').value||1)};
+$('vv').onchange=function(){playVerse(S.cur,+$('vv').value||1)};
+/* ---------- consent + learn hub ---------- */
+function consentOk(){var ok=false;try{ok=!!localStorage.getItem('qkc')}catch(e){}return ok}
+function showLearn(v){$('lh').className=v?'ov':'ov hide'}
+$('lrn').onclick=function(){if(consentOk())showLearn(true);else{[1,2,3].forEach(function(i){$('kc'+i).checked=false});$('kok').disabled=true;$('kc').className='ov'}};
+[1,2,3].forEach(function(i){$('kc'+i).onchange=function(){$('kok').disabled=!($('kc1').checked&&$('kc2').checked&&$('kc3').checked)}});
+$('kok').onclick=function(){try{localStorage.setItem('qkc','1')}catch(e){}$('kc').className='ov hide';showLearn(true)};
+$('kno').onclick=function(){$('kc').className='ov hide'};
+function stopKids(){clearV();stopRun();$('kst').textContent='';$('kg').setAttribute('data-t','start');$('kg').textContent=t('start');$('kb').style.width='0'}
+$('lhx').onclick=function(){if(vsess&&vsess.kid)stopKids();showLearn(false)};
+$('tk').onclick=function(){$('pk').className='';$('pq').className='hide'};
+$('tq').onclick=function(){$('pk').className='hide';$('pq').className='';qInit()};
+/* ---------- kids verse practice ---------- */
+var QUICK=[1,112,113,114,108,109,110,111,105,106,107,103];
+function markQuick(){[].forEach.call($('kq').querySelectorAll('button'),function(b){b.className='sm'+(+b.getAttribute('data-n')===K.n?' sel':'')});$('kns').value=K.n}
+function fillKs(){
+  $('kns').innerHTML=ALL.map(function(n){return'<option value="'+n+'">'+n+'. '+sname(n)+'</option>'}).join('');
+  $('kq').innerHTML='';
+  QUICK.forEach(function(n){var b=document.createElement('button');b.setAttribute('data-n',n);b.textContent=sname(n);b.onclick=function(){if(vsess&&vsess.kid)stopKids();K.n=n;markQuick()};$('kq').appendChild(b)});
+  markQuick();
+}
+$('kns').onchange=function(){if(vsess&&vsess.kid)stopKids();K.n=+$('kns').value;markQuick()};
+function kText(s){
+  getText(s.n).then(function(d){
+    if(vsess!==s)return;var ti=S.ed!=='none'?1:-1;
+    $('kar').textContent=d[0].ayahs[s.a-1].text;
+    $('kur').className=S.ed.slice(0,2)==='ur'?'ur':'en';
+    $('kur').textContent=ti>0&&d[ti].ayahs[s.a-1]?d[ti].ayahs[s.a-1].text:'';
+  }).catch(function(){});
+}
+function kUi(st,gap){
+  var s=vsess,d=$('kst');$('kstars').textContent='★ '+(S.stars||0);
+  if(st==='done'){d.textContent=t('k_done');$('kar').textContent='';$('kur').textContent='';$('kg').setAttribute('data-t','start');$('kg').textContent=t('start');$('kb').style.width='0';return}
+  if(!s||!s.kid)return;
+  $('kg').setAttribute('data-t','stop');$('kg').textContent=t('stop');
+  d.textContent=(st==='gap'?t('k_turn'):t('k_listen'))+'  ·  '+t('l_verse')+' '+s.a+'/'+VC[s.n-1]+'  ·  '+(s.reps-s.left+1)+'/'+s.reps;
+  var b=$('kb');b.style.transition='none';b.style.width='0';
+  if(st==='gap')requestAnimationFrame(function(){b.style.transition='width '+gap+'ms linear';b.style.width='100%'});
+  kText(s);
+}
+function kGap(s){
+  clearTimeout(kTimer);gapOn=true;
+  var gap=Math.max(2500,(Math.max(0,s.end-s.start)/(s.speed||1))*1000+1200);
+  kUi('gap',gap);
+  kTimer=setTimeout(function(){
+    if(vsess!==s)return;gapOn=false;
+    if(--s.left>0){au.currentTime=s.start;play();kUi('listen');return}
+    S.stars=(S.stars||0)+1;save();
+    if(s.a<VC[s.n-1])playVerse(s.n,s.a+1,{mode:'kid',kid:true,left:+S.kr||3,speed:+S.ks||1});
+    else{clearV();stopRun();kUi('done')}
+  },gap);
+}
+function kStart(a){playVerse(K.n,a||1,{mode:'kid',kid:true,left:+S.kr||3,speed:+S.ks||1})}
+$('kg').onclick=function(){if(vsess&&vsess.kid)stopKids();else kStart(1)};
+$('kpv').onclick=function(){var a=vsess&&vsess.kid?vsess.a:1;kStart(Math.max(1,a-1))};
+$('knx').onclick=function(){var a=vsess&&vsess.kid?vsess.a:0;kStart(Math.min(VC[K.n-1],a+1))};
+
+/*QAIDA-START*/
+var QL=[['ا','Alif','الف'],['ب','Ba','با'],['ت','Ta','تا'],['ث','Tha','ثا'],['ج','Jeem','جیم'],['ح','Haa','حا'],['خ','Khaa','خا'],['د','Dal','دال'],['ذ','Thal','ذال'],['ر','Ra','را'],['ز','Zay','زا'],['س','Seen','سین'],['ش','Sheen','شین'],['ص','Saad','صاد'],['ض','Daad','ضاد'],['ط','Taa','طا'],['ظ','Zaa','ظا'],['ع','Ayn','عین'],['غ','Ghayn','غین'],['ف','Fa','فا'],['ق','Qaaf','قاف'],['ك','Kaaf','کاف'],['ل','Laam','لام'],['م','Meem','میم'],['ن','Noon','نون'],['و','Waw','واؤ'],['ه','Haa (soft)','ہا'],['ء','Hamza','ہمزہ'],['ي','Ya','یا']];
+var JO='بتثجحخسشصضطظعغفقكلمنهي'.split('');
+var NJ=['ا','د','ذ','ر','ز','و'];
+function bs(L){return L==='ا'?'أ':L}
+function cap(x){return S.lang==='ur'?x[2]:x[1]}
+function per(f,skip){return QL.filter(function(x){return !(skip&&skip.indexOf(x[0])>=0)}).map(function(x){return{a:f(bs(x[0])),s:cap(x)}})}
+var TW='\u0640',FA='\u064E',KA='\u0650',DA='\u064F',SK='\u0652',SH='\u0651';
+var QLS=[
+{en:'The Arabic letters',ur:'عربی حروف',ne:'Learn the Arabic letters one by one. Say each letter after your teacher.',nu:'عربی حروف ایک ایک کر کے سیکھیں۔ استاد کے بعد ہر حرف دہرائیں۔',
+ items:function(){return QL.map(function(x){return{a:x[0],s:cap(x)}})}},
+{en:'Joined letters',ur:'جڑے ہوئے حروف',ne:'Letters change shape when joined. Each tile shows: alone, start, middle, end. Six letters (ا د ذ ر ز و) do not join to the letter after them.',nu:'جڑنے پر حروف کی شکل بدلتی ہے۔ ہر خانے میں: اکیلا، شروع، درمیان، آخر۔ چھ حروف (ا د ذ ر ز و) اپنے بعد والے حرف سے نہیں جڑتے۔',
+ items:function(){var o=[];JO.forEach(function(L){o.push({a:L+'  '+L+TW+'  '+TW+L+TW+'  '+TW+L,s:''})});NJ.forEach(function(L){o.push({a:L+'  '+TW+L,s:''})});return o}},
+{en:'Short vowels (harakat)',ur:'حرکات',ne:'Three short vowel marks: fatha (a), kasra (i), damma (u).',nu:'تین چھوٹی حرکات: زبر (a)، زیر (i)، پیش (u)۔',
+ items:function(){return per(function(L){return L+FA+'  '+L+KA+'  '+L+DA})}},
+{en:'Tanween',ur:'تنوین',ne:'Tanween doubles the vowel and adds an "n" sound at the end: -an, -in, -un.',nu:'تنوین: دو زبر، دو زیر، دو پیش۔ آخر میں "ن" کی آواز آتی ہے۔',
+ items:function(){return per(function(L){return L+'\u064B  '+L+'\u064D  '+L+'\u064C'})}},
+{en:'Standing vowels',ur:'کھڑی حرکات',ne:'Standing fatha, standing kasra and the inverted damma are held longer than the short vowels.',nu:'کھڑا زبر، کھڑا زیر اور الٹا پیش چھوٹی حرکات سے لمبے پڑھے جاتے ہیں۔',
+ items:function(){return per(function(L){return L+'\u0670  '+L+'\u0656  '+L+'\u0657'})}},
+{en:'Madd letters',ur:'حروفِ مد',ne:'Alif, ya and waw after a matching vowel make it long.',nu:'مطابقت رکھنے والی حرکت کے بعد الف، یا اور واؤ آواز کو لمبا کر دیتے ہیں۔',
+ items:function(){return per(function(L){return L+FA+'ا  '+L+KA+'ي  '+L+DA+'و'},['ا','و','ي','ء'])}},
+{en:'Leen letters',ur:'حروفِ لین',ne:'Waw or ya with sukoon after a fatha is read softly, not long.',nu:'زبر کے بعد ساکن واؤ یا یا نرمی سے پڑھے جاتے ہیں، لمبے نہیں۔',
+ items:function(){return per(function(L){return L+FA+'و'+SK+'  '+L+FA+'ي'+SK},['ا','و','ي','ء'])}},
+{en:'Sukoon',ur:'سکون',ne:'Sukoon means no vowel. The letter joins the sound before it.',nu:'سکون کا مطلب ہے حرکت نہیں۔ حرف پچھلی آواز کے ساتھ مل جاتا ہے۔',
+ items:function(){return per(function(L){return 'أَ'+L+SK+'  إِ'+L+SK+'  أُ'+L+SK},['ا','ء'])}},
+{en:'Shaddah',ur:'شدّ',ne:'Shaddah doubles a letter: say it twice, the first quiet and the second with its vowel.',nu:'شدّ حرف کو دوہرا کرتی ہے: پہلا ساکن اور دوسرا حرکت کے ساتھ۔',
+ items:function(){return per(function(L){return L+SH+FA+'  '+L+SH+KA+'  '+L+SH+DA},['ا','ء'])}},
+{en:'Noon sakinah and tanween',ur:'نون ساکن اور تنوین',ne:'Five rules depending on the letter that comes next. Ask a teacher to check these examples with you.',nu:'اگلے حرف کے لحاظ سے پانچ قاعدے۔ ان مثالوں کو استاد سے ضرور چیک کروائیں۔',
+ rules:[
+ {en:'Izhar (clear)',ur:'اظہار',l:'ء  ه  ع  ح  غ  خ',ex:'مَنْ آمَنَ'},
+ {en:'Idgham with ghunnah',ur:'ادغام مع غنہ',l:'ي  ن  م  و',ex:'مَنْ يَقُولُ'},
+ {en:'Idgham without ghunnah',ur:'ادغام بلا غنہ',l:'ل  ر',ex:'مِنْ رَبِّهِمْ'},
+ {en:'Iqlab',ur:'اقلاب',l:'ب',ex:'مِنْ بَعْدِ'},
+ {en:'Ikhfa (hidden)',ur:'اخفاء',l:'ت ث ج د ذ ز س ش ص ض ط ظ ف ق ك',ex:'مِنْ شَرِّ'}]},
+{en:'Meem sakinah',ur:'میم ساکن',ne:'Three rules for a silent meem. Ask a teacher to check these examples with you.',nu:'ساکن میم کے تین قاعدے۔ ان مثالوں کو استاد سے ضرور چیک کروائیں۔',
+ rules:[
+ {en:'Ikhfa shafawi (before ب)',ur:'اخفاء شفوی',l:'ب',ex:'تَرْمِيهِمْ بِحِجَارَةٍ'},
+ {en:'Idgham shafawi (before م)',ur:'ادغام شفوی',l:'م',ex:'لَهُمْ مَا فِي'},
+ {en:'Izhar shafawi (all other letters)',ur:'اظہار شفوی',l:'',ex:'هُمْ فِيهَا'}]},
+{en:'Laam rules',ur:'لام کے قاعدے',ne:'The laam in Allah, and the laam of "al". Ask a teacher to check these examples with you.',nu:'لفظ اللہ کا لام اور "ال" کا لام۔ ان مثالوں کو استاد سے ضرور چیک کروائیں۔',
+ rules:[
+ {en:'Allah after fatha or damma (heavy)',ur:'اللہ زبر یا پیش کے بعد (پُر)',l:'',ex:'قَالَ اللَّهُ'},
+ {en:'Allah after kasra (light)',ur:'اللہ زیر کے بعد (باریک)',l:'',ex:'بِسْمِ اللَّهِ'},
+ {en:'Shamsi letters (laam is silent)',ur:'حروفِ شمسی (لام نہیں پڑھا جاتا)',l:'ت ث د ذ ر ز س ش ص ض ط ظ ل ن',ex:'الشَّمْسُ'},
+ {en:'Qamari letters (laam is read)',ur:'حروفِ قمری (لام پڑھا جاتا ہے)',l:'ا ب ج ح خ ع غ ف ق ك م ه و ي',ex:'الْقَمَرُ'}]},
+{en:'Qalqalah',ur:'قلقلہ',ne:'Five letters bounce slightly when they have sukoon. Ask a teacher to check this example with you.',nu:'پانچ حروف ساکن ہونے پر ہلکی سی گونج کے ساتھ پڑھے جاتے ہیں۔ اس مثال کو استاد سے چیک کروائیں۔',
+ rules:[{en:'Letters of qalqalah',ur:'حروفِ قلقلہ',l:'قْ  طْ  بْ  جْ  دْ',ex:'أَحَدْ'}]}
+];
+/*QAIDA-END*/
+var QI=0,QZ=null;
+function qDone(i){return (S.qd||[]).indexOf(i)>=0}
+function qDiv(c,x,cls){var d=document.createElement('div');if(cls)d.className=cls;if(x!==undefined)d.textContent=x;c.appendChild(d);return d}
+function qInit(){
+  var l=$('ql');if(!l)return;l.innerHTML='';
+  QLS.forEach(function(L,i){var b=document.createElement('button');b.className='sm'+(i===QI?' sel':'');b.textContent=(qDone(i)?'✓ ':'')+(i+1)+'. '+(S.lang==='ur'?L.ur:L.en);b.onclick=function(){QI=i;qInit()};l.appendChild(b)});
+  qRender(QI);
+}
+function qRender(i){
+  var L=QLS[i],c=$('qc');c.innerHTML='';QZ=null;
+  var h=document.createElement('h3');h.textContent=(i+1)+'. '+(S.lang==='ur'?L.ur:L.en);c.appendChild(h);
+  qDiv(c,S.lang==='ur'?L.nu:L.ne,'note');
+  qDiv(c,t('q_note'),'note');
+  if(L.rules){
+    L.rules.forEach(function(r){var d=qDiv(c,'','qrule');qDiv(d,S.lang==='ur'?r.ur:r.en,'qh');if(r.l)qDiv(d,r.l,'qa');if(r.ex)qDiv(d,r.ex,'qa')});
+  }else{
+    var big=qDiv(c,'','qbig'),g=qDiv(c,'','qg');
+    L.items().forEach(function(x){var tl=qDiv(g,'','qt');qDiv(tl,x.a,'qa');if(x.s)qDiv(tl,x.s,'qs');tl.onclick=function(){big.textContent=x.a.split('  ')[0]}});
+    var row=qDiv(c,'','row'),pb=document.createElement('button');pb.className='sm';pb.textContent=t('q_practice');pb.onclick=function(){qPractice(i)};row.appendChild(pb);
+  }
+  var row2=qDiv(c,'','row'),db=document.createElement('button');db.className='sm';db.textContent=(qDone(i)?'✓ ':'')+t('q_done');
+  db.onclick=function(){S.qd=S.qd||[];var k=S.qd.indexOf(i);if(k>=0)S.qd.splice(k,1);else S.qd.push(i);save();qInit()};row2.appendChild(db);
+}
+function qPractice(i){
+  var c=$('qc');if(QZ)QZ.remove();QZ=qDiv(c,'','qrule');
+  var items=QLS[i].items();
+  function next(){
+    QZ.innerHTML='';var pick=items[Math.floor(Math.random()*items.length)];
+    if(i===0){
+      var wrong=items.filter(function(x){return x.a!==pick.a});wrong.sort(function(){return Math.random()-.5});
+      var opts=[pick].concat(wrong.slice(0,3));opts.sort(function(){return Math.random()-.5});
+      qDiv(QZ,pick.a,'qbig');var row=qDiv(QZ,'','row'),msg=qDiv(QZ,'','qh');
+      opts.forEach(function(o){var b=document.createElement('button');b.className='sm';b.textContent=o.s;b.onclick=function(){if(o===pick){msg.textContent=t('q_ok');setTimeout(next,700)}else msg.textContent=t('q_no')};row.appendChild(b)});
+    }else{
+      qDiv(QZ,pick.a.split('  ')[0]+'   '+(pick.a.split('  ')[1]||''),'qbig');
+      var r2=qDiv(QZ,'','row'),nb=document.createElement('button');nb.className='sm';nb.textContent=t('q_next');nb.onclick=next;r2.appendChild(nb);
+    }
+  }
+  next();
+}
+
 /* ---------- start / recovery ---------- */
 function lock(){try{if(navigator.wakeLock&&running)navigator.wakeLock.request('screen').then(function(l){wk=l}).catch(function(){})}catch(e){}}
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')lock()});
 $('go').onclick=function(){
   running=!running;S.run=running?1:0;save();setGo();
-  if(running){lock();needTap(false);if(!au.src||!curInfo)load(idxOf(S.cur),S.pos);else if(!blocked()&&!rec)play()}
-  else au.pause();
+  if(running){lock();needTap(false);if(!au.src||!curInfo)load(idxOf(S.cur),S.pos);else if((!blocked()||ovr)&&!rec)play()}
+  else{clearV();au.pause()}
   tick();
 };
 ['click','keydown','touchstart'].forEach(function(ev){document.addEventListener(ev,function(){if(needT&&running){needTap(false);if(au.src)play()}},true)});
 var lastT=-1,stuck=0;
 setInterval(function(){
-  if(!running||rec||blocked()||!au.src||ldg||needT){stuck=0;return}
+  if(!running||rec||(blocked()&&!ovr)||!au.src||ldg||needT||gapOn){stuck=0;return}
   if(au.paused&&!au.ended){play();return}
   if(Math.abs(au.currentTime-lastT)<0.5){if(++stuck>=3){stuck=0;load(idxOf(S.cur),au.currentTime)}}else stuck=0;
   lastT=au.currentTime;
@@ -660,7 +911,7 @@ nums('sh',1,12);nums('sm',0,45,15);nums('hr',1,24);nums('ph',1,12);nums('pm',0,4
 $('city').innerHTML='<option value="" data-t="o_pick"></option>'+Object.keys(CITIES).map(function(c){return'<option>'+c+'</option>'}).join('');
 function bind(id,k,num,fn){var el=$(id);el.value=S[k];el.onchange=function(){S[k]=num?(parseFloat(el.value)||0):el.value;save();if(fn)fn();render();tick()}}
 bind('meth','m');bind('az','az',1);bind('jm','jm',1);bind('sr','sr',1);bind('zw','zw',1);bind('ss','ss',1);bind('pr','pr',1);bind('hj','hj',1);bind('auto','auto',1);bind('azOn','azOn',1);
-bind('md','md');bind('sa','sa');bind('sc','sc',0,function(){$('cu').className='g'+(S.sc==='custom'?'':' hide')});bind('sh','sh',1);bind('sm','sm',1);bind('hr','hr',1);
+bind('md','md');bind('vm','vm',0,function(){$('vnw').className=S.vm==='rep'?'':'hide'});bind('vn','vn',1);bind('kr','kr',1);bind('ks','ks',1);$('vnw').className=S.vm==='rep'?'':'hide';bind('sa','sa');bind('sc','sc',0,function(){$('cu').className='g'+(S.sc==='custom'?'':' hide')});bind('sh','sh',1);bind('sm','sm',1);bind('hr','hr',1);
 bind('vs','vs',1,function(){loadText(S.cur)});bind('ed','ed',0,function(){loadText(S.cur)});bind('tf','tf',0,function(){loadText(S.cur)});
 bind('fs','fs',1,function(){$('tx').style.setProperty('--fs',S.fs)});bind('as','as',1);
 bind('lg','lang',0,function(){applyLang()});$('lg').value=S.lang;
@@ -676,7 +927,7 @@ function applyLang(){
   [].forEach.call(document.querySelectorAll('[data-t]'),function(e){e.textContent=t(e.getAttribute('data-t'))});
   [].forEach.call(document.querySelectorAll('[data-ph]'),function(e){e.placeholder=t(e.getAttribute('data-ph'))});
   [].forEach.call($('sl').options,function(o){if(o.value!=='0')o.textContent=o.value});
-  setGo();vbtn(!!rec);fillRc();placeUi();render();planUi();offCount();stIfo();offtxt();shownm();dnTxt();buildSync();tick();
+  setGo();vbtn(!!rec);fillRc();placeUi();render();qInit();kUi('x');planUi();offCount();stIfo();offtxt();shownm();dnTxt();buildSync();tick();
 }
 
 /* ---------- location, welcome, share ---------- */
@@ -731,8 +982,8 @@ function boot(){
 Promise.race([loadLists().catch(function(){}),new Promise(function(r){setTimeout(r,7000)})]).then(boot);
 fetch('https://www.mp3quran.net/api/v3/suwar?language=eng').then(j).then(function(d){d.suwar.forEach(function(s){names[s.id]=s.name.trim()});fillSu();shownm();dnTxt();planUi()}).catch(function(){});
 fetch('https://www.mp3quran.net/api/v3/suwar?language=ar').then(j).then(function(d){d.suwar.forEach(function(s){namesAr[s.id]=s.name.trim()});fillSu();shownm()}).catch(function(){});
-$('rc').onchange=function(){S.rk=$('rc').value;S.mid=0;fillMo();save();if(running||au.src)load(idxOf(S.cur),0);tick()};
-$('mo').onchange=function(){S.mid=+$('mo').value;save();load(idxOf(S.cur),0)};
+$('rc').onchange=function(){clearV();S.rk=$('rc').value;S.mid=0;fillMo();save();if(running||au.src)load(idxOf(S.cur),0);tick()};
+$('mo').onchange=function(){clearV();S.mid=+$('mo').value;save();load(idxOf(S.cur),0)};
 if(/QuranApp/.test(navigator.userAgent||'')){['dpdf','daud','dvid','inb'].forEach(function(i){$(i).className='hide'})}
 setInterval(tick,1000);setInterval(render,6e4);
 })();
